@@ -5,7 +5,7 @@ namespace Graphical;
 
 /// <summary>A graph whose edges have no direction.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
-public sealed class UndirectedGraph<TNode> : Graph<TNode>
+public sealed class UndirectedGraph<TNode> : Graph<TNode>, IUndirectedGraph<TNode>
     where TNode : notnull
 {
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
@@ -36,6 +36,45 @@ public sealed class UndirectedGraph<TNode> : Graph<TNode>
     public UndirectedGraph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
         : base(isDirected: false, nodeCapacity, comparer)
     {
+    }
+
+    /// <inheritdoc/>
+    public bool AreConnected(TNode first, TNode second)
+    {
+        ThrowHelper.ThrowIfNull(first);
+        ThrowHelper.ThrowIfNull(second);
+        if (!NodeTable.TryGetSlot(first, out var start) || !NodeTable.TryGetSlot(second, out var goal))
+        {
+            return false;
+        }
+
+        if (start == goal)
+        {
+            return true;
+        }
+
+        var visited = new BitSet(NodeTable.SlotLimit);
+        var queue = new Queue<int>();
+        visited.Set(start);
+        queue.Enqueue(start);
+        while (queue.Count > 0)
+        {
+            foreach (var neighbor in Adjacency[queue.Dequeue()])
+            {
+                if (neighbor == goal)
+                {
+                    return true;
+                }
+
+                if (!visited.Get(neighbor))
+                {
+                    visited.Set(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+
+        return false;
     }
 
     private protected override void RemoveNodeCore(int slot)

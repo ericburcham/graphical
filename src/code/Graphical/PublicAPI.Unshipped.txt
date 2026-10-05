@@ -66,3 +66,7 @@ Graphical.Graph<TNode>.Clear() -> void
 Graphical.IGraph<TNode>.Clear() -> void
 Graphical.Graph<TNode>.IsDirected.get -> bool
 Graphical.IReadOnlyGraph<TNode>.IsDirected.get -> bool
+Graphical.IReadOnlyUndirectedGraph<TNode>
+Graphical.IReadOnlyUndirectedGraph<TNode>.AreConnected(TNode first, TNode second) -> bool
+Graphical.IUndirectedGraph<TNode>
+Graphical.UndirectedGraph<TNode>.AreConnected(TNode first, TNode second) -> bool

@@ -16,3 +16,4 @@ override Graphical.Edge<TNode>.GetHashCode() -> int
 static Graphical.Edge<TNode>.operator !=(Graphical.Edge<TNode> left, Graphical.Edge<TNode> right) -> bool
 static Graphical.Edge<TNode>.operator ==(Graphical.Edge<TNode> left, Graphical.Edge<TNode> right) -> bool
 Graphical.Edge<TNode>.Reverse() -> Graphical.Edge<TNode>
+Graphical.Edge<TNode>.Deconstruct(out TNode source, out TNode target) -> void

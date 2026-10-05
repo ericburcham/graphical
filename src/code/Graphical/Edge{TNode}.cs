@@ -35,6 +35,16 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
         return new Edge<TNode>(Target, Source);
     }
 
+    /// <summary>Deconstructs the edge into its endpoints.</summary>
+    /// <param name="source">Receives <see cref="Source"/>.</param>
+    /// <param name="target">Receives <see cref="Target"/>.</param>
+    /// <remarks>O(1).</remarks>
+    public void Deconstruct(out TNode source, out TNode target)
+    {
+        source = Source;
+        target = Target;
+    }
+
     /// <summary>Determines whether this edge has the same source and target as <paramref name="other"/>.</summary>
     /// <param name="other">The edge to compare with.</param>
     /// <returns><see langword="true"/> if both endpoints are equal under <see cref="EqualityComparer{T}.Default"/>; otherwise <see langword="false"/>.</returns>

@@ -124,6 +124,8 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     {
         var successors = Adjacency[slot];
         var predecessors = _predecessors[slot];
+        var selfLoop = successors.Contains(slot) ? 1 : 0;
+        EdgeCount -= successors.Count + predecessors.Count - selfLoop;
         foreach (var successor in successors)
         {
             _predecessors[successor].Remove(slot);
@@ -134,8 +136,6 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
             Adjacency[predecessor].Remove(slot);
         }
 
-        var selfLoop = successors.Contains(slot) ? 1 : 0;
-        EdgeCount -= successors.Count + predecessors.Count - selfLoop;
         successors.Clear();
         predecessors.Clear();
         base.RemoveNodeCore(slot);

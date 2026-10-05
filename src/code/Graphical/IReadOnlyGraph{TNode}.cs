@@ -8,6 +8,9 @@ namespace Graphical;
 public interface IReadOnlyGraph<TNode>
     where TNode : notnull
 {
+    /// <summary>Gets a value indicating whether the graph's edges have a direction.</summary>
+    bool IsDirected { get; }
+
     /// <summary>Gets the comparer used to decide whether two nodes are the same node.</summary>
     IEqualityComparer<TNode> Comparer { get; }
 

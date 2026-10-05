@@ -14,6 +14,8 @@ internal sealed class NodeTable<TNode>
 
     private readonly Dictionary<TNode, int> _slotsByNode;
 
+    private readonly Stack<int> _freeSlots = new();
+
     private TNode[] _nodes;
 
     private long[] _sequences;
@@ -43,7 +45,29 @@ internal sealed class NodeTable<TNode>
         return _sequences[slot];
     }
 
+    public bool IsOccupied(int slot)
+    {
+        return _sequences[slot] != 0;
+    }
+
     public int Add(TNode node)
+    {
+        var slot = _freeSlots.Count > 0 ? _freeSlots.Pop() : TakeNewSlot();
+        _slotsByNode.Add(node, slot);
+        _nodes[slot] = node;
+        _sequences[slot] = _nextSequence++;
+        return slot;
+    }
+
+    public void Remove(int slot)
+    {
+        _slotsByNode.Remove(_nodes[slot]);
+        _nodes[slot] = default!;
+        _sequences[slot] = 0;
+        _freeSlots.Push(slot);
+    }
+
+    private int TakeNewSlot()
     {
         if (_slotLimit == _nodes.Length)
         {
@@ -52,10 +76,6 @@ internal sealed class NodeTable<TNode>
             Array.Resize(ref _sequences, capacity);
         }
 
-        var slot = _slotLimit++;
-        _slotsByNode.Add(node, slot);
-        _nodes[slot] = node;
-        _sequences[slot] = _nextSequence++;
-        return slot;
+        return _slotLimit++;
     }
 }

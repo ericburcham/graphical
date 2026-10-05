@@ -7,9 +7,10 @@ internal sealed class WhenApplyingRandomOperationSequences
 {
     private static readonly object[] SCENARIOS =
     [
-        new object[] { 1, 40, 600 },
-        new object[] { 2, 100, 400 },
-        new object[] { 3, 200, 330 },
+        new object[] { 1, 40, 600, 40 },
+        new object[] { 2, 100, 400, 40 },
+        new object[] { 3, 200, 330, 40 },
+        new object[] { 4, 120, 250, 150 },
     ];
 
     private readonly int _seed;
@@ -17,6 +18,8 @@ internal sealed class WhenApplyingRandomOperationSequences
     private readonly int _nodeLimit;
 
     private readonly int _operations;
+
+    private readonly int _maximumBatchSize;
 
     private readonly List<string> _discrepancies = [];
 
@@ -34,8 +37,9 @@ internal sealed class WhenApplyingRandomOperationSequences
 
     private int _peakNodeCount;
 
-    public WhenApplyingRandomOperationSequences(int seed, int nodeLimit, int operations)
+    public WhenApplyingRandomOperationSequences(int seed, int nodeLimit, int operations, int maximumBatchSize)
     {
+        _maximumBatchSize = maximumBatchSize;
         _seed = seed;
         _nodeLimit = nodeLimit;
         _operations = operations;
@@ -159,7 +163,7 @@ internal sealed class WhenApplyingRandomOperationSequences
     private string AddEdgeBatch()
     {
         var batch = new List<Edge<int>>();
-        var size = _random.Next(1, 40);
+        var size = _random.Next(1, _maximumBatchSize);
         for (var index = 0; index < size; index++)
         {
             var (source, target) = RandomForwardPair(allowNewNodes: true);

@@ -20,3 +20,7 @@ Graphical.Edge<TNode>.Deconstruct(out TNode source, out TNode target) -> void
 override Graphical.Edge<TNode>.ToString() -> string!
 Graphical.Edge
 static Graphical.Edge.Create<TNode>(TNode source, TNode target) -> Graphical.Edge<TNode>
+Graphical.GraphCycleException
+Graphical.GraphCycleException.GraphCycleException() -> void
+Graphical.GraphCycleException.GraphCycleException(string? message) -> void
+Graphical.GraphCycleException.GraphCycleException(string? message, System.Exception? innerException) -> void

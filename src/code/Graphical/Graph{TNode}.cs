@@ -81,6 +81,19 @@ public abstract class Graph<TNode> : IGraph<TNode>
     }
 
     /// <inheritdoc/>
+    public bool RemoveNode(TNode node)
+    {
+        ThrowHelper.ThrowIfNull(node);
+        if (!NodeTable.TryGetSlot(node, out var slot))
+        {
+            return false;
+        }
+
+        RemoveNodeCore(slot);
+        return true;
+    }
+
+    /// <inheritdoc/>
     public bool AddEdge(TNode source, TNode target)
     {
         ThrowHelper.ThrowIfNull(source);
@@ -117,6 +130,12 @@ public abstract class Graph<TNode> : IGraph<TNode>
 
     /// <summary>Adds an edge between two existing slots that are not yet connected, and counts it.</summary>
     private protected abstract void AddEdgeCore(int source, int target);
+
+    /// <summary>Removes the node in <paramref name="slot"/>; overrides detach its edges first, then call the base.</summary>
+    private protected virtual void RemoveNodeCore(int slot)
+    {
+        NodeTable.Remove(slot);
+    }
 
     /// <summary>Removes an existing edge between two slots, and uncounts it.</summary>
     private protected abstract void RemoveEdgeCore(int source, int target);

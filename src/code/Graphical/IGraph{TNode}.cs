@@ -10,6 +10,11 @@ public interface IGraph<TNode> : IReadOnlyGraph<TNode>
     /// <returns><see langword="true"/> if the node was added; <see langword="false"/> if it was already present.</returns>
     bool AddNode(TNode node);
 
+    /// <summary>Removes <paramref name="node"/> and every edge that touches it.</summary>
+    /// <param name="node">The node to remove.</param>
+    /// <returns><see langword="true"/> if the node was removed; <see langword="false"/> if it was not in the graph.</returns>
+    bool RemoveNode(TNode node);
+
     /// <summary>Adds an edge from <paramref name="source"/> to <paramref name="target"/>, adding either node if it is missing.</summary>
     /// <param name="source">The node the edge starts at.</param>
     /// <param name="target">The node the edge ends at.</param>

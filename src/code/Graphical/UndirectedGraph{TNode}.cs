@@ -38,6 +38,22 @@ public sealed class UndirectedGraph<TNode> : Graph<TNode>
     {
     }
 
+    private protected override void RemoveNodeCore(int slot)
+    {
+        var neighbors = Adjacency[slot];
+        foreach (var neighbor in neighbors)
+        {
+            if (neighbor != slot)
+            {
+                Adjacency[neighbor].Remove(slot);
+            }
+        }
+
+        EdgeCount -= neighbors.Count;
+        neighbors.Clear();
+        base.RemoveNodeCore(slot);
+    }
+
     private protected override void AddEdgeCore(int source, int target)
     {
         Adjacency[source].Add(target);

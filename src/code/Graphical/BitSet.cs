@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Graphical;
 
-/// <summary>A fixed-capacity set of non-negative integers backed by a <see cref="ulong"/> array.</summary>
+/// <summary>
+/// A growable set of small non-negative integers (node slots) backed by a <see cref="ulong"/> array, one bit per slot.
+/// </summary>
 internal sealed class BitSet
 {
     private const int BITS_PER_WORD = 64;
@@ -23,6 +25,21 @@ internal sealed class BitSet
     public BitSet(int capacity)
     {
         _words = new ulong[WordsFor(capacity)];
+    }
+
+    public bool Get(int index)
+    {
+        return (_words[index / BITS_PER_WORD] & MaskFor(index)) != 0;
+    }
+
+    public void Set(int index)
+    {
+        _words[index / BITS_PER_WORD] |= MaskFor(index);
+    }
+
+    public void Clear(int index)
+    {
+        _words[index / BITS_PER_WORD] &= ~MaskFor(index);
     }
 
     public void EnsureCapacity(int capacity)
@@ -99,23 +116,14 @@ internal sealed class BitSet
         }
     }
 
+    private static ulong MaskFor(int index)
+    {
+        return 1UL << (index % BITS_PER_WORD);
+    }
+
     private static int WordsFor(int capacity)
     {
         return (capacity + BITS_PER_WORD - 1) / BITS_PER_WORD;
     }
 
-    public bool Get(int index)
-    {
-        return (_words[index / BITS_PER_WORD] & (1UL << (index % BITS_PER_WORD))) != 0;
-    }
-
-    public void Set(int index)
-    {
-        _words[index / BITS_PER_WORD] |= 1UL << (index % BITS_PER_WORD);
-    }
-
-    public void Clear(int index)
-    {
-        _words[index / BITS_PER_WORD] &= ~(1UL << (index % BITS_PER_WORD));
-    }
 }

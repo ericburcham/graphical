@@ -15,4 +15,10 @@ public interface IGraph<TNode> : IReadOnlyGraph<TNode>
     /// <param name="target">The node the edge ends at.</param>
     /// <returns><see langword="true"/> if the edge was added; <see langword="false"/> if it already existed.</returns>
     bool AddEdge(TNode source, TNode target);
+
+    /// <summary>Removes the edge from <paramref name="source"/> to <paramref name="target"/>. Both nodes stay in the graph.</summary>
+    /// <param name="source">The node the edge starts at.</param>
+    /// <param name="target">The node the edge ends at.</param>
+    /// <returns><see langword="true"/> if the edge was removed; <see langword="false"/> if it did not exist, including when either node is missing.</returns>
+    bool RemoveEdge(TNode source, TNode target);
 }

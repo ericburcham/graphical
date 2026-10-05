@@ -26,12 +26,16 @@ internal sealed class WhenPassingANullEndpoint
 
         _exceptions["AddEdge source"] = Catch.Exception(() => _graph.AddEdge(null!, NODE));
         _exceptions["AddEdge target"] = Catch.Exception(() => _graph.AddEdge(NODE, null!));
+        _exceptions["RemoveEdge source"] = Catch.Exception(() => _graph.RemoveEdge(null!, NODE));
+        _exceptions["RemoveEdge target"] = Catch.Exception(() => _graph.RemoveEdge(NODE, null!));
         _exceptions["ContainsEdge source"] = Catch.Exception(() => _graph.ContainsEdge(null!, NODE));
         _exceptions["ContainsEdge target"] = Catch.Exception(() => _graph.ContainsEdge(NODE, null!));
     }
 
     [TestCase("AddEdge source", "source")]
     [TestCase("AddEdge target", "target")]
+    [TestCase("RemoveEdge source", "source")]
+    [TestCase("RemoveEdge target", "target")]
     [TestCase("ContainsEdge source", "source")]
     [TestCase("ContainsEdge target", "target")]
     public void TheMemberShouldThrowArgumentNullExceptionNamingTheEndpoint(string call, string parameter)

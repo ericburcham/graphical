@@ -99,6 +99,21 @@ public abstract class Graph<TNode> : IGraph<TNode>
         return true;
     }
 
+    /// <inheritdoc/>
+    public bool RemoveEdge(TNode source, TNode target)
+    {
+        if (!ContainsEdge(source, target))
+        {
+            return false;
+        }
+
+        NodeTable.TryGetSlot(source, out var sourceSlot);
+        NodeTable.TryGetSlot(target, out var targetSlot);
+        RemoveEdgeCore(sourceSlot, targetSlot);
+        NodeTable.IncrementVersion();
+        return true;
+    }
+
     internal int Version => NodeTable.Version;
 
     internal IEnumerable<Edge<TNode>> EnumerateEdges()
@@ -108,6 +123,9 @@ public abstract class Graph<TNode> : IGraph<TNode>
 
     /// <summary>Adds an edge between two existing slots that are not yet connected, and counts it.</summary>
     private protected abstract void AddEdgeCore(int source, int target);
+
+    /// <summary>Removes an existing edge between two slots, and uncounts it.</summary>
+    private protected abstract void RemoveEdgeCore(int source, int target);
 
     private protected abstract IEnumerable<Edge<TNode>> EnumerateEdgesCore();
 

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace Graphical;
 
@@ -11,6 +12,14 @@ internal static class ThrowHelper
         if (expected != actual)
         {
             throw new InvalidOperationException("The graph was modified; enumeration operation may not execute.");
+        }
+    }
+
+    public static void ThrowIfNull<T>([NotNull] T value, [CallerArgumentExpression(nameof(value))] string? paramName = null)
+    {
+        if (value is null)
+        {
+            throw new ArgumentNullException(paramName);
         }
     }
 

@@ -10,3 +10,8 @@ Graphical.Edge<TNode>.Edge() -> void
 Graphical.Edge<TNode>.Edge(TNode source, TNode target) -> void
 Graphical.Edge<TNode>.Source.get -> TNode
 Graphical.Edge<TNode>.Target.get -> TNode
+Graphical.Edge<TNode>.Equals(Graphical.Edge<TNode> other) -> bool
+override Graphical.Edge<TNode>.Equals(object? obj) -> bool
+override Graphical.Edge<TNode>.GetHashCode() -> int
+static Graphical.Edge<TNode>.operator !=(Graphical.Edge<TNode> left, Graphical.Edge<TNode> right) -> bool
+static Graphical.Edge<TNode>.operator ==(Graphical.Edge<TNode> left, Graphical.Edge<TNode> right) -> bool

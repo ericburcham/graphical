@@ -225,7 +225,7 @@ public abstract class Graph<TNode> : IGraph<TNode>
 
     private bool AddValidatedEdge(TNode source, TNode target)
     {
-        if (ContainsEdge(source, target))
+        if (TryFindEdge(source, target, out _, out _))
         {
             return false;
         }
@@ -240,6 +240,12 @@ public abstract class Graph<TNode> : IGraph<TNode>
     {
         ThrowHelper.ThrowIfNull(source);
         ThrowHelper.ThrowIfNull(target);
+        return TryFindEdge(source, target, out sourceSlot, out targetSlot);
+    }
+
+    /// <summary>Finds the slots of two non-null endpoints when both exist and are joined by an edge.</summary>
+    private bool TryFindEdge(TNode source, TNode target, out int sourceSlot, out int targetSlot)
+    {
         targetSlot = -1;
         return NodeTable.TryGetSlot(source, out sourceSlot)
             && NodeTable.TryGetSlot(target, out targetSlot)

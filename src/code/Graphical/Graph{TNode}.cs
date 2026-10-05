@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Graphical;
 
@@ -59,6 +60,18 @@ public abstract class Graph<TNode> : IGraph<TNode>
     }
 
     /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> GetNeighbors(TNode node)
+    {
+        return GetNeighborsCore(GetSlot(node));
+    }
+
+    /// <inheritdoc/>
+    public int GetDegree(TNode node)
+    {
+        return GetDegreeCore(GetSlot(node));
+    }
+
+    /// <inheritdoc/>
     public bool AddNode(TNode node)
     {
         ThrowHelper.ThrowIfNull(node);
@@ -97,6 +110,22 @@ public abstract class Graph<TNode> : IGraph<TNode>
     private protected abstract void AddEdgeCore(int source, int target);
 
     private protected abstract IEnumerable<Edge<TNode>> EnumerateEdgesCore();
+
+    private protected abstract IReadOnlyCollection<TNode> GetNeighborsCore(int slot);
+
+    private protected abstract int GetDegreeCore(int slot);
+
+    /// <summary>Maps a node to its slot, throwing if the node is null or missing.</summary>
+    private protected int GetSlot(TNode node, [CallerArgumentExpression(nameof(node))] string? paramName = null)
+    {
+        ThrowHelper.ThrowIfNull(node, paramName);
+        if (!NodeTable.TryGetSlot(node, out var slot))
+        {
+            ThrowHelper.ThrowNodeNotFound(node);
+        }
+
+        return slot;
+    }
 
     /// <summary>Grows every per-slot array to <paramref name="capacity"/>.</summary>
     private protected virtual void OnCapacityChanged(int capacity)

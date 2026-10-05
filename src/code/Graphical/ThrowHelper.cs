@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -21,6 +22,12 @@ internal static class ThrowHelper
         {
             throw new ArgumentNullException(paramName);
         }
+    }
+
+    [DoesNotReturn]
+    public static void ThrowNodeNotFound<TNode>(TNode node)
+    {
+        throw new KeyNotFoundException($"The node '{node}' is not in the graph.");
     }
 
     [DoesNotReturn]

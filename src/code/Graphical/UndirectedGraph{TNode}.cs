@@ -45,6 +45,13 @@ public sealed class UndirectedGraph<TNode> : Graph<TNode>
         EdgeCount++;
     }
 
+    private protected override void RemoveEdgeCore(int source, int target)
+    {
+        Adjacency[source].Remove(target);
+        Adjacency[target].Remove(source);
+        EdgeCount--;
+    }
+
     private protected override IReadOnlyCollection<TNode> GetNeighborsCore(int slot)
     {
         return new SlotSetView<TNode>(NodeTable, () => Adjacency, slot);

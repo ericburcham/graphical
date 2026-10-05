@@ -51,6 +51,8 @@ public abstract class Graph<TNode> : IGraph<TNode>
     /// <inheritdoc/>
     public bool ContainsEdge(TNode source, TNode target)
     {
+        ThrowHelper.ThrowIfNull(source);
+        ThrowHelper.ThrowIfNull(target);
         return NodeTable.TryGetSlot(source, out var sourceSlot)
             && NodeTable.TryGetSlot(target, out var targetSlot)
             && Adjacency[sourceSlot].Contains(targetSlot);
@@ -72,6 +74,8 @@ public abstract class Graph<TNode> : IGraph<TNode>
     /// <inheritdoc/>
     public bool AddEdge(TNode source, TNode target)
     {
+        ThrowHelper.ThrowIfNull(source);
+        ThrowHelper.ThrowIfNull(target);
         if (ContainsEdge(source, target))
         {
             return false;

@@ -9,4 +9,10 @@ public interface IGraph<TNode> : IReadOnlyGraph<TNode>
     /// <param name="node">The node to add.</param>
     /// <returns><see langword="true"/> if the node was added; <see langword="false"/> if it was already present.</returns>
     bool AddNode(TNode node);
+
+    /// <summary>Adds an edge from <paramref name="source"/> to <paramref name="target"/>, adding either node if it is missing.</summary>
+    /// <param name="source">The node the edge starts at.</param>
+    /// <param name="target">The node the edge ends at.</param>
+    /// <returns><see langword="true"/> if the edge was added; <see langword="false"/> if it already existed.</returns>
+    bool AddEdge(TNode source, TNode target);
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Graphical;
 
@@ -39,8 +38,34 @@ public sealed class UndirectedGraph<TNode> : Graph<TNode>
     {
     }
 
+    private protected override void AddEdgeCore(int source, int target)
+    {
+        Adjacency[source].Add(target);
+        Adjacency[target].Add(source);
+        EdgeCount++;
+    }
+
+    /// <remarks>
+    /// Each edge is stored in both endpoints' sets; it is reported once, from the endpoint with the earlier
+    /// insertion sequence, so <see cref="Edge{TNode}.Source"/> is the endpoint that joined the graph first.
+    /// </remarks>
     private protected override IEnumerable<Edge<TNode>> EnumerateEdgesCore()
     {
-        return Enumerable.Empty<Edge<TNode>>();
+        for (var slot = 0; slot < NodeTable.SlotLimit; slot++)
+        {
+            if (!NodeTable.IsOccupied(slot))
+            {
+                continue;
+            }
+
+            var sequence = NodeTable.GetSequence(slot);
+            foreach (var neighbor in Adjacency[slot])
+            {
+                if (sequence <= NodeTable.GetSequence(neighbor))
+                {
+                    yield return new Edge<TNode>(NodeTable[slot], NodeTable[neighbor]);
+                }
+            }
+        }
     }
 }

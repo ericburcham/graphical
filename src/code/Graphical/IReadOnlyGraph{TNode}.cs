@@ -26,4 +26,10 @@ public interface IReadOnlyGraph<TNode>
     /// <param name="node">The node to look for.</param>
     /// <returns><see langword="true"/> if the graph contains the node; otherwise <see langword="false"/>.</returns>
     bool ContainsNode(TNode node);
+
+    /// <summary>Determines whether the graph contains an edge from <paramref name="source"/> to <paramref name="target"/>.</summary>
+    /// <param name="source">The node the edge starts at.</param>
+    /// <param name="target">The node the edge ends at.</param>
+    /// <returns><see langword="true"/> if the edge exists; otherwise <see langword="false"/>, including when either node is missing.</returns>
+    bool ContainsEdge(TNode source, TNode target);
 }

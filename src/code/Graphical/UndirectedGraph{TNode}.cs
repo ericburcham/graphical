@@ -34,7 +34,7 @@ public sealed class UndirectedGraph<TNode> : Graph<TNode>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
     public UndirectedGraph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
-        : base(nodeCapacity, comparer)
+        : base(isDirected: false, nodeCapacity, comparer)
     {
     }
 

@@ -64,3 +64,5 @@ Graphical.IGraph<TNode>.AddEdges(System.Collections.Generic.IEnumerable<Graphica
 Graphical.IGraph<TNode>.AddNodes(System.Collections.Generic.IEnumerable<TNode>! nodes) -> int
 Graphical.Graph<TNode>.Clear() -> void
 Graphical.IGraph<TNode>.Clear() -> void
+Graphical.Graph<TNode>.IsDirected.get -> bool
+Graphical.IReadOnlyGraph<TNode>.IsDirected.get -> bool

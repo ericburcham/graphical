@@ -9,18 +9,22 @@ namespace Graphical;
 public abstract class Graph<TNode> : IGraph<TNode>
     where TNode : notnull
 {
-    private protected Graph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
+    private protected Graph(bool isDirected, int nodeCapacity, IEqualityComparer<TNode>? comparer)
     {
         if (nodeCapacity < 0)
         {
             ThrowHelper.ThrowNegativeCapacity(nodeCapacity);
         }
 
+        IsDirected = isDirected;
         NodeTable = new NodeTable<TNode>(nodeCapacity, comparer ?? EqualityComparer<TNode>.Default);
         Adjacency = new HashSet<int>[nodeCapacity];
         Nodes = new NodeCollection<TNode>(NodeTable);
         Edges = new EdgeCollection<TNode>(this);
     }
+
+    /// <inheritdoc/>
+    public bool IsDirected { get; }
 
     /// <inheritdoc/>
     public IEqualityComparer<TNode> Comparer => NodeTable.Comparer;

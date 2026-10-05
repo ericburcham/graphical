@@ -4,6 +4,7 @@ namespace Graphical.UnitTests.IDirectedGraphTests;
 
 [TestFixture(typeof(DirectedGraph<>))]
 [TestFixture(typeof(DirectedAcyclicGraph<>))]
+[TestFixture(typeof(ReachabilityDirectedAcyclicGraph<>))]
 internal sealed class WhenMutatingTheGraphDuringDirectedEnumeration
 {
     private readonly Type _graphType;

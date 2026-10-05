@@ -94,6 +94,11 @@ Graphical.IReadOnlyGraph<TNode>.Nodes.get -> System.Collections.Generic.IReadOnl
 Graphical.IReadOnlyUndirectedGraph<TNode>
 Graphical.IReadOnlyUndirectedGraph<TNode>.AreConnected(TNode first, TNode second) -> bool
 Graphical.IUndirectedGraph<TNode>
+Graphical.ReachabilityDirectedAcyclicGraph<TNode>
+Graphical.ReachabilityDirectedAcyclicGraph<TNode>.ReachabilityDirectedAcyclicGraph() -> void
+Graphical.ReachabilityDirectedAcyclicGraph<TNode>.ReachabilityDirectedAcyclicGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
+Graphical.ReachabilityDirectedAcyclicGraph<TNode>.ReachabilityDirectedAcyclicGraph(int nodeCapacity) -> void
+Graphical.ReachabilityDirectedAcyclicGraph<TNode>.ReachabilityDirectedAcyclicGraph(int nodeCapacity, System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
 Graphical.UndirectedGraph<TNode>
 Graphical.UndirectedGraph<TNode>.AreConnected(TNode first, TNode second) -> bool
 Graphical.UndirectedGraph<TNode>.UndirectedGraph() -> void

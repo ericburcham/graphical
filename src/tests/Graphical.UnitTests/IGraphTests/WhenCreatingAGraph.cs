@@ -5,6 +5,7 @@ namespace Graphical.UnitTests.IGraphTests;
 [TestFixture(typeof(UndirectedGraph<>))]
 [TestFixture(typeof(DirectedGraph<>))]
 [TestFixture(typeof(DirectedAcyclicGraph<>))]
+[TestFixture(typeof(ReachabilityDirectedAcyclicGraph<>))]
 internal sealed class WhenCreatingAGraph
 {
     private readonly Type _graphType;

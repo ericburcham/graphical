@@ -4,6 +4,7 @@ namespace Graphical.UnitTests.IDirectedGraphTests;
 
 [TestFixture(typeof(DirectedGraph<>))]
 [TestFixture(typeof(DirectedAcyclicGraph<>))]
+[TestFixture(typeof(ReachabilityDirectedAcyclicGraph<>))]
 internal sealed class WhenQueryingAMissingOrNullNode
 {
     private const string MISSING = "missing";

@@ -4,6 +4,9 @@ Graphical.DirectedGraph<TNode>.DirectedGraph() -> void
 Graphical.DirectedGraph<TNode>.DirectedGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
 Graphical.DirectedGraph<TNode>.DirectedGraph(int nodeCapacity) -> void
 Graphical.DirectedGraph<TNode>.DirectedGraph(int nodeCapacity, System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
+Graphical.DirectedGraph<TNode>.GetInDegree(TNode node) -> int
+Graphical.DirectedGraph<TNode>.GetOutDegree(TNode node) -> int
+Graphical.DirectedGraph<TNode>.GetPredecessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.DirectedGraph<TNode>.GetSuccessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.Edge
 static Graphical.Edge.Create<TNode>(TNode source, TNode target) -> Graphical.Edge<TNode>
@@ -42,6 +45,7 @@ Graphical.GraphCycleException
 Graphical.GraphCycleException.GraphCycleException() -> void
 Graphical.GraphCycleException.GraphCycleException(string? message) -> void
 Graphical.GraphCycleException.GraphCycleException(string? message, System.Exception? innerException) -> void
+Graphical.IDirectedGraph<TNode>
 Graphical.IGraph<TNode>
 Graphical.IGraph<TNode>.AddEdge(TNode source, TNode target) -> bool
 Graphical.IGraph<TNode>.AddEdges(System.Collections.Generic.IEnumerable<Graphical.Edge<TNode>>! edges) -> int
@@ -50,6 +54,11 @@ Graphical.IGraph<TNode>.AddNodes(System.Collections.Generic.IEnumerable<TNode>! 
 Graphical.IGraph<TNode>.Clear() -> void
 Graphical.IGraph<TNode>.RemoveEdge(TNode source, TNode target) -> bool
 Graphical.IGraph<TNode>.RemoveNode(TNode node) -> bool
+Graphical.IReadOnlyDirectedGraph<TNode>
+Graphical.IReadOnlyDirectedGraph<TNode>.GetInDegree(TNode node) -> int
+Graphical.IReadOnlyDirectedGraph<TNode>.GetOutDegree(TNode node) -> int
+Graphical.IReadOnlyDirectedGraph<TNode>.GetPredecessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.IReadOnlyDirectedGraph<TNode>.GetSuccessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.IReadOnlyGraph<TNode>
 Graphical.IReadOnlyGraph<TNode>.Comparer.get -> System.Collections.Generic.IEqualityComparer<TNode>!
 Graphical.IReadOnlyGraph<TNode>.ContainsEdge(TNode source, TNode target) -> bool

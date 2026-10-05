@@ -18,7 +18,14 @@ internal sealed class EdgeCollection<TNode> : IReadOnlyCollection<Edge<TNode>>
 
     public IEnumerator<Edge<TNode>> GetEnumerator()
     {
-        return _graph.EnumerateEdges().GetEnumerator();
+        var version = _graph.Version;
+        foreach (var edge in _graph.EnumerateEdges())
+        {
+            ThrowHelper.ThrowIfVersionChanged(version, _graph.Version);
+            yield return edge;
+        }
+
+        ThrowHelper.ThrowIfVersionChanged(version, _graph.Version);
     }
 
     IEnumerator IEnumerable.GetEnumerator()

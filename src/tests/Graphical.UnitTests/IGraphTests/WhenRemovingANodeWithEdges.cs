@@ -29,7 +29,7 @@ internal sealed class WhenRemovingANodeWithEdges
     {
         _graph = GraphFactory.Create<string>(_graphType);
         _graph.AddEdge(REMOVED, FIRST);
-        _graph.AddEdge(SECOND, REMOVED);
+        _graph.AddEdge(REMOVED, SECOND);
         _graph.AddEdge(FIRST, SECOND);
 
         _removed = _graph.RemoveNode(REMOVED);

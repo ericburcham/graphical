@@ -39,4 +39,4 @@ Judgment calls made while implementing `docs/graph-types-spec.md`. One entry per
 
 ## Setup
 
-No prerequisites had to be installed: the .NET 10 SDK (10.0.401) was already present, and the `net48` tests build without `Microsoft.NETFramework.ReferenceAssemblies` because the .NET Framework 4.8 targeting pack is resolved by the SDK. No commands need to be run by the owner.
+No prerequisites had to be installed: the .NET 10 SDK (10.0.401) was already present, and the `net48` tests build without an explicit `Microsoft.NETFramework.ReferenceAssemblies` reference because the .NET SDK adds that package implicitly when the 4.8 targeting pack is not installed (it appears in `project.assets.json`). No commands need to be run by the owner.

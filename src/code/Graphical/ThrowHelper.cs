@@ -25,6 +25,18 @@ internal static class ThrowHelper
     }
 
     [DoesNotReturn]
+    public static void ThrowNullItem(string paramName)
+    {
+        throw new ArgumentException("The collection must not contain a null node.", paramName);
+    }
+
+    [DoesNotReturn]
+    public static void ThrowNullEndpoint(string paramName)
+    {
+        throw new ArgumentException("Every edge must have a non-null source and target.", paramName);
+    }
+
+    [DoesNotReturn]
     public static void ThrowNodeNotFound<TNode>(TNode node)
     {
         throw new KeyNotFoundException($"The node '{node}' is not in the graph.");

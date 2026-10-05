@@ -58,3 +58,7 @@ Graphical.Graph<TNode>.RemoveEdge(TNode source, TNode target) -> bool
 Graphical.IGraph<TNode>.RemoveEdge(TNode source, TNode target) -> bool
 Graphical.Graph<TNode>.RemoveNode(TNode node) -> bool
 Graphical.IGraph<TNode>.RemoveNode(TNode node) -> bool
+Graphical.Graph<TNode>.AddEdges(System.Collections.Generic.IEnumerable<Graphical.Edge<TNode>>! edges) -> int
+Graphical.Graph<TNode>.AddNodes(System.Collections.Generic.IEnumerable<TNode>! nodes) -> int
+Graphical.IGraph<TNode>.AddEdges(System.Collections.Generic.IEnumerable<Graphical.Edge<TNode>>! edges) -> int
+Graphical.IGraph<TNode>.AddNodes(System.Collections.Generic.IEnumerable<TNode>! nodes) -> int

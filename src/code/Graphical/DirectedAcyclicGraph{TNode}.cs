@@ -258,11 +258,14 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
                 }
             }
 
-            foreach (var successor in extraSuccessors[index] ?? [])
+            if (extraSuccessors[index] is { } extras)
             {
-                if (--inDegrees[successor] == 0)
+                foreach (var successor in extras)
                 {
-                    ready.Enqueue(successor);
+                    if (--inDegrees[successor] == 0)
+                    {
+                        ready.Enqueue(successor);
+                    }
                 }
             }
         }

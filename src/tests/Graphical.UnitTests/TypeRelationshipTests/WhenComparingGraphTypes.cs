@@ -40,4 +40,16 @@ internal sealed class WhenComparingGraphTypes
     {
         typeof(UndirectedGraph<int>).Should().BeAssignableTo<IReadOnlyUndirectedGraph<int>>();
     }
+
+    [Test]
+    public void ADirectedAcyclicGraphShouldBeADirectedAcyclicGraphContract()
+    {
+        typeof(DirectedAcyclicGraph<int>).Should().BeAssignableTo<IDirectedAcyclicGraph<int>>();
+    }
+
+    [Test]
+    public void ADirectedAcyclicGraphShouldBeADirectedGraph()
+    {
+        typeof(DirectedAcyclicGraph<int>).Should().BeAssignableTo<DirectedGraph<int>>();
+    }
 }

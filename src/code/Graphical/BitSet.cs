@@ -28,6 +28,18 @@ internal sealed class BitSet
         }
     }
 
+    public void CopyFrom(BitSet other)
+    {
+        EnsureWords(other._words.Length);
+        Array.Copy(other._words, _words, other._words.Length);
+        Array.Clear(_words, other._words.Length, _words.Length - other._words.Length);
+    }
+
+    public void ClearAll()
+    {
+        Array.Clear(_words, 0, _words.Length);
+    }
+
     private void EnsureWords(int words)
     {
         if (words > _words.Length)

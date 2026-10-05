@@ -94,18 +94,53 @@ public abstract class Graph<TNode> : IGraph<TNode>
     }
 
     /// <inheritdoc/>
+    public int AddNodes(IEnumerable<TNode> nodes)
+    {
+        ThrowHelper.ThrowIfNull(nodes);
+        var batch = new List<TNode>(nodes);
+        foreach (var node in batch)
+        {
+            if (node is null)
+            {
+                ThrowHelper.ThrowNullItem(nameof(nodes));
+            }
+        }
+
+        var added = 0;
+        foreach (var node in batch)
+        {
+            if (!NodeTable.TryGetSlot(node, out _))
+            {
+                AddNodeSlot(node);
+                added++;
+            }
+        }
+
+        return added;
+    }
+
+    /// <inheritdoc/>
     public bool AddEdge(TNode source, TNode target)
     {
         ThrowHelper.ThrowIfNull(source);
         ThrowHelper.ThrowIfNull(target);
-        if (ContainsEdge(source, target))
+        return AddValidatedEdge(source, target);
+    }
+
+    /// <inheritdoc/>
+    public int AddEdges(IEnumerable<Edge<TNode>> edges)
+    {
+        ThrowHelper.ThrowIfNull(edges);
+        var batch = new List<Edge<TNode>>(edges);
+        foreach (var edge in batch)
         {
-            return false;
+            if (edge.Source is null || edge.Target is null)
+            {
+                ThrowHelper.ThrowNullEndpoint(nameof(edges));
+            }
         }
 
-        AddEdgeCore(GetOrAddSlot(source), GetOrAddSlot(target));
-        NodeTable.IncrementVersion();
-        return true;
+        return AddEdgesCore(batch);
     }
 
     /// <inheritdoc/>
@@ -126,6 +161,22 @@ public abstract class Graph<TNode> : IGraph<TNode>
     internal IEnumerable<Edge<TNode>> EnumerateEdges()
     {
         return EnumerateEdgesCore();
+    }
+
+    /// <summary>Adds a batch of edges whose endpoints are known to be non-null.</summary>
+    /// <returns>The number of edges actually added.</returns>
+    private protected virtual int AddEdgesCore(IReadOnlyList<Edge<TNode>> edges)
+    {
+        var added = 0;
+        foreach (var edge in edges)
+        {
+            if (AddValidatedEdge(edge.Source, edge.Target))
+            {
+                added++;
+            }
+        }
+
+        return added;
     }
 
     /// <summary>Adds an edge between two existing slots that are not yet connected, and counts it.</summary>
@@ -170,6 +221,18 @@ public abstract class Graph<TNode> : IGraph<TNode>
     private protected virtual void OnNodeAdded(int slot)
     {
         Adjacency[slot] ??= [];
+    }
+
+    private bool AddValidatedEdge(TNode source, TNode target)
+    {
+        if (ContainsEdge(source, target))
+        {
+            return false;
+        }
+
+        AddEdgeCore(GetOrAddSlot(source), GetOrAddSlot(target));
+        NodeTable.IncrementVersion();
+        return true;
     }
 
     /// <summary>Validates both endpoints and finds their slots when both exist and are joined by an edge.</summary>

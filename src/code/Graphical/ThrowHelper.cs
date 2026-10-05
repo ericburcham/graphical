@@ -43,6 +43,12 @@ internal static class ThrowHelper
     }
 
     [DoesNotReturn]
+    public static void ThrowCycle<TNode>(TNode source, TNode target)
+    {
+        throw new GraphCycleException($"Adding the edge ({source} -> {target}) would create a cycle.");
+    }
+
+    [DoesNotReturn]
     public static void ThrowNegativeCapacity(int nodeCapacity)
     {
         throw new ArgumentOutOfRangeException(nameof(nodeCapacity), nodeCapacity, "The node capacity must not be negative.");

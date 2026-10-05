@@ -7,7 +7,7 @@ namespace Graphical;
 /// <summary>A directed graph that rejects any edge that would create a cycle, including self-loops.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
 [DebuggerDisplay("NodeCount = {NodeCount}, EdgeCount = {EdgeCount}")]
-public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>
+public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcyclicGraph<TNode>
     where TNode : notnull
 {
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
@@ -38,5 +38,34 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>
     public DirectedAcyclicGraph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
         : base(nodeCapacity, comparer)
     {
+    }
+
+    /// <inheritdoc/>
+    public bool WouldCreateCycle(TNode source, TNode target)
+    {
+        ThrowHelper.ThrowIfNull(source);
+        ThrowHelper.ThrowIfNull(target);
+        if (Comparer.Equals(source, target))
+        {
+            return true;
+        }
+
+        return NodeTable.TryGetSlot(source, out var sourceSlot)
+            && NodeTable.TryGetSlot(target, out var targetSlot)
+            && WouldCreateCycleCore(sourceSlot, targetSlot);
+    }
+
+    /// <summary>An edge closes a cycle when it is a self-loop or its target already reaches its source.</summary>
+    private protected virtual bool WouldCreateCycleCore(int source, int target)
+    {
+        return source == target || HasPathCore(target, source);
+    }
+
+    private protected override void OnAddingEdge(TNode source, TNode target)
+    {
+        if (WouldCreateCycle(source, target))
+        {
+            ThrowHelper.ThrowCycle(source, target);
+        }
     }
 }

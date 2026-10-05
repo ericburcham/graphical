@@ -7,7 +7,10 @@ Graphical.DirectedGraph<TNode>.DirectedGraph(int nodeCapacity, System.Collection
 Graphical.DirectedGraph<TNode>.GetInDegree(TNode node) -> int
 Graphical.DirectedGraph<TNode>.GetOutDegree(TNode node) -> int
 Graphical.DirectedGraph<TNode>.GetPredecessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.DirectedGraph<TNode>.GetSinks() -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.DirectedGraph<TNode>.GetSources() -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.DirectedGraph<TNode>.GetSuccessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.DirectedGraph<TNode>.HasPath(TNode source, TNode target) -> bool
 Graphical.Edge
 static Graphical.Edge.Create<TNode>(TNode source, TNode target) -> Graphical.Edge<TNode>
 Graphical.Edge<TNode>
@@ -58,7 +61,10 @@ Graphical.IReadOnlyDirectedGraph<TNode>
 Graphical.IReadOnlyDirectedGraph<TNode>.GetInDegree(TNode node) -> int
 Graphical.IReadOnlyDirectedGraph<TNode>.GetOutDegree(TNode node) -> int
 Graphical.IReadOnlyDirectedGraph<TNode>.GetPredecessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.IReadOnlyDirectedGraph<TNode>.GetSinks() -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.IReadOnlyDirectedGraph<TNode>.GetSources() -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.IReadOnlyDirectedGraph<TNode>.GetSuccessors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.IReadOnlyDirectedGraph<TNode>.HasPath(TNode source, TNode target) -> bool
 Graphical.IReadOnlyGraph<TNode>
 Graphical.IReadOnlyGraph<TNode>.Comparer.get -> System.Collections.Generic.IEqualityComparer<TNode>!
 Graphical.IReadOnlyGraph<TNode>.ContainsEdge(TNode source, TNode target) -> bool

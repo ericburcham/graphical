@@ -72,6 +72,54 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
         return Adjacency[GetSlot(node)].Count;
     }
 
+    /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> GetSources()
+    {
+        return CollectNodes(_predecessors);
+    }
+
+    /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> GetSinks()
+    {
+        return CollectNodes(Adjacency);
+    }
+
+    /// <inheritdoc/>
+    public bool HasPath(TNode source, TNode target)
+    {
+        ThrowHelper.ThrowIfNull(source);
+        ThrowHelper.ThrowIfNull(target);
+        return NodeTable.TryGetSlot(source, out var sourceSlot)
+            && NodeTable.TryGetSlot(target, out var targetSlot)
+            && HasPathCore(sourceSlot, targetSlot);
+    }
+
+    /// <summary>Breadth-first search from the successors of <paramref name="source"/>.</summary>
+    private protected virtual bool HasPathCore(int source, int target)
+    {
+        var visited = new BitSet(NodeTable.SlotLimit);
+        var queue = new Queue<int>();
+        queue.Enqueue(source);
+        while (queue.Count > 0)
+        {
+            foreach (var successor in Adjacency[queue.Dequeue()])
+            {
+                if (successor == target)
+                {
+                    return true;
+                }
+
+                if (!visited.Get(successor))
+                {
+                    visited.Set(successor);
+                    queue.Enqueue(successor);
+                }
+            }
+        }
+
+        return false;
+    }
+
     private protected override void RemoveNodeCore(int slot)
     {
         var successors = Adjacency[slot];
@@ -147,6 +195,21 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     {
         base.OnCapacityChanged(capacity);
         Array.Resize(ref _predecessors, capacity);
+    }
+
+    /// <summary>Lists, in slot order, the nodes whose set in <paramref name="sets"/> is empty.</summary>
+    private TNode[] CollectNodes(HashSet<int>[] sets)
+    {
+        var nodes = new List<TNode>();
+        for (var slot = 0; slot < NodeTable.SlotLimit; slot++)
+        {
+            if (NodeTable.IsOccupied(slot) && sets[slot].Count == 0)
+            {
+                nodes.Add(NodeTable[slot]);
+            }
+        }
+
+        return nodes.ToArray();
     }
 
     private protected override void OnNodeAdded(int slot)

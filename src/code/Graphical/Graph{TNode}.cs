@@ -156,6 +156,12 @@ public abstract class Graph<TNode> : IGraph<TNode>
         return true;
     }
 
+    /// <inheritdoc/>
+    public void Clear()
+    {
+        ClearCore();
+    }
+
     internal int Version => NodeTable.Version;
 
     internal IEnumerable<Edge<TNode>> EnumerateEdges()
@@ -207,6 +213,18 @@ public abstract class Graph<TNode> : IGraph<TNode>
         }
 
         return slot;
+    }
+
+    /// <summary>Removes every node and edge; overrides reset their own per-slot storage, then call the base.</summary>
+    private protected virtual void ClearCore()
+    {
+        for (var slot = 0; slot < NodeTable.SlotLimit; slot++)
+        {
+            Adjacency[slot]?.Clear();
+        }
+
+        EdgeCount = 0;
+        NodeTable.Clear();
     }
 
     /// <summary>Grows every per-slot array to <paramref name="capacity"/>.</summary>

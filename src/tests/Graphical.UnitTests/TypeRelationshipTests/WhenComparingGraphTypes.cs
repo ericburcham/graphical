@@ -52,4 +52,16 @@ internal sealed class WhenComparingGraphTypes
     {
         typeof(DirectedAcyclicGraph<int>).Should().BeAssignableTo<DirectedGraph<int>>();
     }
+
+    [Test]
+    public void AReachabilityDirectedAcyclicGraphShouldBeADirectedAcyclicGraphContract()
+    {
+        typeof(ReachabilityDirectedAcyclicGraph<int>).Should().BeAssignableTo<IDirectedAcyclicGraph<int>>();
+    }
+
+    [Test]
+    public void AReachabilityDirectedAcyclicGraphShouldBeADropInDirectedAcyclicGraph()
+    {
+        typeof(ReachabilityDirectedAcyclicGraph<int>).Should().BeAssignableTo<DirectedAcyclicGraph<int>>();
+    }
 }

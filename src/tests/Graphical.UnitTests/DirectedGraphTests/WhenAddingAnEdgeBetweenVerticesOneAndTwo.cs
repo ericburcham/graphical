@@ -35,4 +35,10 @@ internal class WhenAddingAnEdgeBetweenVerticesOneAndTwo
     {
         _vertexOneNeighbors.Should().Contain(TWO);
     }
+
+    [Test]
+    public void VertexTwoShouldHaveNoNeighbors()
+    {
+        _vertexTwoNeighbors.Should().BeEmpty();
+    }
 }

@@ -14,9 +14,15 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
 {
     private const int INVARIANT_CHECK_SLOT_LIMIT = 256;
 
+    private const int MINIMUM_REBUILD_BATCH = 32;
+
+    private const int REBUILD_SIZE_DIVISOR = 8;
+
     private BitSet[] _descendants;
 
     private BitSet[] _ancestors;
+
+    private bool _deferClosureUpdates;
 
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
     public ReachabilityDirectedAcyclicGraph()
@@ -78,7 +84,7 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
     /// </summary>
     private protected override void AddEdgeCore(int source, int target)
     {
-        if (_descendants[source].Get(target))
+        if (_deferClosureUpdates || _descendants[source].Get(target))
         {
             base.AddEdgeCore(source, target);
             return;
@@ -98,6 +104,41 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
         }
 
         AssertClosureInvariants();
+    }
+
+    /// <summary>
+    /// Lets the base validate the batch and add it atomically, then brings the closure up to date. Small batches are
+    /// applied edge by edge; a batch of at least <see cref="MINIMUM_REBUILD_BATCH"/> edges that is also at least
+    /// 1/<see cref="REBUILD_SIZE_DIVISOR"/> of the graph's current node-plus-edge count rebuilds the whole closure in
+    /// one reverse-topological pass instead. Each incremental update can touch O(V²/64) words, while a rebuild costs
+    /// O((V + E) · V/64), so rebuilding wins once the batch is a sizeable fraction of the graph.
+    /// </summary>
+    private protected override int AddEdgesCore(IReadOnlyList<Edge<TNode>> edges)
+    {
+        var rebuild = edges.Count >= MINIMUM_REBUILD_BATCH
+            && edges.Count * REBUILD_SIZE_DIVISOR >= NodeCount + EdgeCount;
+        if (!rebuild)
+        {
+            return base.AddEdgesCore(edges);
+        }
+
+        int added;
+        _deferClosureUpdates = true;
+        try
+        {
+            added = base.AddEdgesCore(edges);
+        }
+        finally
+        {
+            _deferClosureUpdates = false;
+        }
+
+        if (added > 0)
+        {
+            RebuildClosure();
+        }
+
+        return added;
     }
 
     /// <summary>
@@ -164,6 +205,23 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
         base.OnNodeAdded(slot);
         _descendants[slot] ??= new BitSet(NodeTable.Capacity);
         _ancestors[slot] ??= new BitSet(NodeTable.Capacity);
+    }
+
+    /// <summary>Recomputes every descendant set in reverse topological order and every ancestor set in topological order.</summary>
+    private void RebuildClosure()
+    {
+        var order = GetTopologicalSlots();
+        for (var index = order.Length - 1; index >= 0; index--)
+        {
+            RebuildFrom(_descendants, order[index], Adjacency[order[index]]);
+        }
+
+        foreach (var slot in order)
+        {
+            RebuildFrom(_ancestors, slot, Predecessors[slot]);
+        }
+
+        AssertClosureInvariants();
     }
 
     /// <summary>

@@ -62,3 +62,5 @@ Graphical.Graph<TNode>.AddEdges(System.Collections.Generic.IEnumerable<Graphical
 Graphical.Graph<TNode>.AddNodes(System.Collections.Generic.IEnumerable<TNode>! nodes) -> int
 Graphical.IGraph<TNode>.AddEdges(System.Collections.Generic.IEnumerable<Graphical.Edge<TNode>>! edges) -> int
 Graphical.IGraph<TNode>.AddNodes(System.Collections.Generic.IEnumerable<TNode>! nodes) -> int
+Graphical.Graph<TNode>.Clear() -> void
+Graphical.IGraph<TNode>.Clear() -> void

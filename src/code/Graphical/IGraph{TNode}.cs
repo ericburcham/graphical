@@ -38,4 +38,7 @@ public interface IGraph<TNode> : IReadOnlyGraph<TNode>
     /// <param name="edges">The edges to add; duplicates are ignored.</param>
     /// <returns>The number of edges actually added.</returns>
     int AddEdges(IEnumerable<Edge<TNode>> edges);
+
+    /// <summary>Removes every node and edge.</summary>
+    void Clear();
 }

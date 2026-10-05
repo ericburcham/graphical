@@ -3,7 +3,7 @@
 namespace Graphical.UnitTests.DirectedGraphTests;
 
 [TestFixture]
-internal class WhenAddingAnEdgeBetweenVerticesOneAndTwo
+internal sealed class WhenAddingAnEdgeBetweenVerticesOneAndTwo
 {
     [OneTimeSetUp]
     public void OneTimeSetUp()

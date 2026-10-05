@@ -13,3 +13,10 @@ Judgment calls made while implementing `docs/graph-types-spec.md`. One entry per
 ## Implementation decisions
 - **Test packages:** NUnit 4.6.1 (latest 4.x; 5.0.0 exists but the spec requires 4.x), NUnit3TestAdapter 6.3.0 (supports net462+ and net8+ per its README), Microsoft.NET.Test.Sdk 18.10.1, NUnit.Analyzers 4.15.0, FluentAssertions 7.2.2 (latest 7.x). `coverlet.collector` is kept (already referenced) and upgraded to 10.1.0.
 - **`LangVersion` latest set in the test project during milestone 1**, because the `net48` target otherwise defaults to C# 7.3 and rejects nullable and file-scoped namespaces. It moves to `Directory.Build.props` in milestone 2.
+- **`global.json` pins `10.0.401`**, the newest installed 10.0 SDK, with `rollForward: latestFeature` as the spec requires.
+- **`ContinuousIntegrationBuild` is enabled when `CI` is `true`** (MSBuild comparisons are case-insensitive), the value GitHub Actions, Azure Pipelines and most CI hosts set.
+- **Test fixtures are `sealed`** to satisfy CA1852 (raised by `AnalysisLevel` latest-recommended) rather than suppressing it.
+- **Package metadata lives in `Graphical.csproj`**, not `Directory.Build.props`, because it applies only to the packable library.
+- **`Authors` is `Eric Burcham` and `Copyright` is `Copyright (c) 2023 Eric Burcham`**, from the copyright line in `LICENSE`.
+- **PolySharp 1.16.0 and Microsoft.CodeAnalysis.PublicApiAnalyzers 5.6.0** (latest stable). PolySharp's generated types stay internal (its default), so they never appear in the public API.
+- **The pre-existing vertex API got placeholder XML docs and `PublicAPI.Unshipped.txt` entries in milestone 2** so the build passes with `GenerateDocumentationFile` and the public API analyzer; both go away when milestone 6 removes that API.

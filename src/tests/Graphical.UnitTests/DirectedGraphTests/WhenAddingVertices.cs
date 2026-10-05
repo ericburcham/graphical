@@ -3,7 +3,7 @@
 namespace Graphical.UnitTests.DirectedGraphTests;
 
 [TestFixture]
-internal class WhenAddingVertices
+internal sealed class WhenAddingVertices
 {
     [OneTimeSetUp]
     public void OneTimeSetUp()

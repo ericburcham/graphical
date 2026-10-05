@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Graphical;
 
 /// <summary>A graph whose edges have no direction.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
+[DebuggerDisplay("NodeCount = {NodeCount}, EdgeCount = {EdgeCount}")]
 public sealed class UndirectedGraph<TNode> : Graph<TNode>, IUndirectedGraph<TNode>
     where TNode : notnull
 {

@@ -45,6 +45,18 @@ public sealed class UndirectedGraph<TNode> : Graph<TNode>
         EdgeCount++;
     }
 
+    private protected override IReadOnlyCollection<TNode> GetNeighborsCore(int slot)
+    {
+        return new SlotSetView<TNode>(NodeTable, () => Adjacency, slot);
+    }
+
+    /// <remarks>A self-loop contributes 2: it leaves and re-enters the node.</remarks>
+    private protected override int GetDegreeCore(int slot)
+    {
+        var neighbors = Adjacency[slot];
+        return neighbors.Contains(slot) ? neighbors.Count + 1 : neighbors.Count;
+    }
+
     /// <remarks>
     /// Each edge is stored in both endpoints' sets; it is reported once, from the endpoint with the earlier
     /// insertion sequence, so <see cref="Edge{TNode}.Source"/> is the endpoint that joined the graph first.

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Graphical;
@@ -32,4 +33,18 @@ public interface IReadOnlyGraph<TNode>
     /// <param name="target">The node the edge ends at.</param>
     /// <returns><see langword="true"/> if the edge exists; otherwise <see langword="false"/>, including when either node is missing.</returns>
     bool ContainsEdge(TNode source, TNode target);
+
+    /// <summary>Gets a live read-only view of the nodes that share an edge with <paramref name="node"/>, each once.</summary>
+    /// <param name="node">The node whose neighbors to get.</param>
+    /// <returns>The neighbors; for a directed graph, successors and predecessors together.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
+    /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    IReadOnlyCollection<TNode> GetNeighbors(TNode node);
+
+    /// <summary>Gets the number of edge endpoints at <paramref name="node"/>.</summary>
+    /// <param name="node">The node whose degree to get.</param>
+    /// <returns>The degree; a self-loop counts twice, and for a directed graph this is in-degree plus out-degree.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
+    /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    int GetDegree(TNode node);
 }

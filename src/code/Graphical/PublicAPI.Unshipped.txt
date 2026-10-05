@@ -50,3 +50,7 @@ Graphical.Graph<TNode>.AddEdge(TNode source, TNode target) -> bool
 Graphical.Graph<TNode>.ContainsEdge(TNode source, TNode target) -> bool
 Graphical.IGraph<TNode>.AddEdge(TNode source, TNode target) -> bool
 Graphical.IReadOnlyGraph<TNode>.ContainsEdge(TNode source, TNode target) -> bool
+Graphical.Graph<TNode>.GetDegree(TNode node) -> int
+Graphical.Graph<TNode>.GetNeighbors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.IReadOnlyGraph<TNode>.GetDegree(TNode node) -> int
+Graphical.IReadOnlyGraph<TNode>.GetNeighbors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!

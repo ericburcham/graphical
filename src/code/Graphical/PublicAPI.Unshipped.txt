@@ -1,0 +1,7 @@
+#nullable enable
+Graphical.DirectedGraph<T>
+Graphical.DirectedGraph<T>.AddEdge(T source, T destination) -> void
+Graphical.DirectedGraph<T>.AddVertex(T vertex) -> void
+Graphical.DirectedGraph<T>.DirectedGraph() -> void
+Graphical.DirectedGraph<T>.GetNeighbors(T vertex) -> System.Collections.Generic.IEnumerable<T>!
+Graphical.DirectedGraph<T>.GetVertices() -> System.Collections.Generic.IEnumerable<T>!

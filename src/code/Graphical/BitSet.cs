@@ -16,7 +16,20 @@ internal sealed class BitSet
 
     public void EnsureCapacity(int capacity)
     {
-        var words = WordsFor(capacity);
+        EnsureWords(WordsFor(capacity));
+    }
+
+    public void UnionWith(BitSet other)
+    {
+        EnsureWords(other._words.Length);
+        for (var i = 0; i < other._words.Length; i++)
+        {
+            _words[i] |= other._words[i];
+        }
+    }
+
+    private void EnsureWords(int words)
+    {
         if (words > _words.Length)
         {
             Array.Resize(ref _words, words);

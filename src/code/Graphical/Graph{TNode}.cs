@@ -36,6 +36,24 @@ public abstract class Graph<TNode> : IGraph<TNode>
 
     private protected NodeTable<TNode> NodeTable { get; }
 
+    /// <inheritdoc/>
+    public bool ContainsNode(TNode node)
+    {
+        return NodeTable.TryGetSlot(node, out _);
+    }
+
+    /// <inheritdoc/>
+    public bool AddNode(TNode node)
+    {
+        if (NodeTable.TryGetSlot(node, out _))
+        {
+            return false;
+        }
+
+        NodeTable.Add(node);
+        return true;
+    }
+
     private protected abstract IEnumerable<Edge<TNode>> EnumerateEdgesCore();
 
     internal IEnumerable<Edge<TNode>> EnumerateEdges()

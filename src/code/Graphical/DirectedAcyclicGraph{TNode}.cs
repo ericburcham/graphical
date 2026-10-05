@@ -66,6 +66,18 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
     }
 
     /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> GetAncestors(TNode node)
+    {
+        return GetAncestorsCore(GetSlot(node));
+    }
+
+    /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> GetDescendants(TNode node)
+    {
+        return GetDescendantsCore(GetSlot(node));
+    }
+
+    /// <inheritdoc/>
     public bool WouldCreateCycle(TNode source, TNode target)
     {
         ThrowHelper.ThrowIfNull(source);
@@ -126,6 +138,31 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
         _topologicalOrder = null;
         _topologicalOrderVersion = Version;
         return order;
+    }
+
+    /// <summary>Breadth-first search over predecessors.</summary>
+    private protected virtual IReadOnlyCollection<TNode> GetAncestorsCore(int slot)
+    {
+        return ToNodes(Reach(slot, Predecessors));
+    }
+
+    /// <summary>Breadth-first search over successors.</summary>
+    private protected virtual IReadOnlyCollection<TNode> GetDescendantsCore(int slot)
+    {
+        return ToNodes(Reach(slot, Adjacency));
+    }
+
+    /// <summary>Maps the set bits of <paramref name="slots"/> to their nodes, in slot order.</summary>
+    private protected TNode[] ToNodes(BitSet slots)
+    {
+        var nodes = new TNode[slots.PopCount()];
+        var index = 0;
+        foreach (var slot in slots.EnumerateSetBits())
+        {
+            nodes[index++] = NodeTable[slot];
+        }
+
+        return nodes;
     }
 
     /// <summary>An edge closes a cycle when it is a self-loop or its target already reaches its source.</summary>
@@ -250,5 +287,26 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
 
             return index;
         }
+    }
+
+    /// <summary>Collects every slot reachable from <paramref name="start"/> through <paramref name="sets"/>, excluding the start.</summary>
+    private BitSet Reach(int start, HashSet<int>[] sets)
+    {
+        var reached = new BitSet(NodeTable.SlotLimit);
+        var queue = new Queue<int>();
+        queue.Enqueue(start);
+        while (queue.Count > 0)
+        {
+            foreach (var next in sets[queue.Dequeue()])
+            {
+                if (!reached.Get(next))
+                {
+                    reached.Set(next);
+                    queue.Enqueue(next);
+                }
+            }
+        }
+
+        return reached;
     }
 }

@@ -3,6 +3,7 @@ using AwesomeAssertions;
 namespace Graphical.UnitTests.IDirectedAcyclicGraphTests;
 
 [TestFixture(typeof(DirectedAcyclicGraph<>))]
+[TestFixture(typeof(ReachabilityDirectedAcyclicGraph<>))]
 internal sealed class WhenAddingAnEdgeThatWouldCreateACycle
 {
     private const string NEW_NODE = "new";

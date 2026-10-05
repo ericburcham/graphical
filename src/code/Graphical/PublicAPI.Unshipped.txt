@@ -5,3 +5,8 @@ Graphical.DirectedGraph<T>.AddVertex(T vertex) -> void
 Graphical.DirectedGraph<T>.DirectedGraph() -> void
 Graphical.DirectedGraph<T>.GetNeighbors(T vertex) -> System.Collections.Generic.IEnumerable<T>!
 Graphical.DirectedGraph<T>.GetVertices() -> System.Collections.Generic.IEnumerable<T>!
+Graphical.Edge<TNode>
+Graphical.Edge<TNode>.Edge() -> void
+Graphical.Edge<TNode>.Edge(TNode source, TNode target) -> void
+Graphical.Edge<TNode>.Source.get -> TNode
+Graphical.Edge<TNode>.Target.get -> TNode

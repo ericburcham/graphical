@@ -4,6 +4,7 @@ Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph() -> void
 Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
 Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph(int nodeCapacity) -> void
 Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph(int nodeCapacity, System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
+Graphical.DirectedAcyclicGraph<TNode>.GetTopologicalOrder() -> System.Collections.Generic.IReadOnlyList<TNode>!
 Graphical.DirectedAcyclicGraph<TNode>.WouldCreateCycle(TNode source, TNode target) -> bool
 Graphical.DirectedGraph<TNode>
 Graphical.DirectedGraph<TNode>.DirectedGraph() -> void
@@ -65,6 +66,7 @@ Graphical.IGraph<TNode>.Clear() -> void
 Graphical.IGraph<TNode>.RemoveEdge(TNode source, TNode target) -> bool
 Graphical.IGraph<TNode>.RemoveNode(TNode node) -> bool
 Graphical.IReadOnlyDirectedAcyclicGraph<TNode>
+Graphical.IReadOnlyDirectedAcyclicGraph<TNode>.GetTopologicalOrder() -> System.Collections.Generic.IReadOnlyList<TNode>!
 Graphical.IReadOnlyDirectedAcyclicGraph<TNode>.WouldCreateCycle(TNode source, TNode target) -> bool
 Graphical.IReadOnlyDirectedGraph<TNode>
 Graphical.IReadOnlyDirectedGraph<TNode>.GetInDegree(TNode node) -> int

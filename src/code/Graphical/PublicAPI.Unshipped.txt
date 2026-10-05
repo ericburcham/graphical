@@ -1,4 +1,9 @@
 #nullable enable
+Graphical.DirectedAcyclicGraph<TNode>
+Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph() -> void
+Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
+Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph(int nodeCapacity) -> void
+Graphical.DirectedAcyclicGraph<TNode>.DirectedAcyclicGraph(int nodeCapacity, System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
 Graphical.DirectedGraph<TNode>
 Graphical.DirectedGraph<TNode>.DirectedGraph() -> void
 Graphical.DirectedGraph<TNode>.DirectedGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void

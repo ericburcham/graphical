@@ -3,6 +3,7 @@ using AwesomeAssertions;
 namespace Graphical.UnitTests.IDirectedGraphTests;
 
 [TestFixture(typeof(DirectedGraph<>))]
+[TestFixture(typeof(DirectedAcyclicGraph<>))]
 internal sealed class WhenQueryingSuccessorsAndPredecessors
 {
     private readonly Type _graphType;

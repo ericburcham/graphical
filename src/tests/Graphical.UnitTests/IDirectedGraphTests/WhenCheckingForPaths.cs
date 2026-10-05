@@ -3,6 +3,7 @@ using AwesomeAssertions;
 namespace Graphical.UnitTests.IDirectedGraphTests;
 
 [TestFixture(typeof(DirectedGraph<>))]
+[TestFixture(typeof(DirectedAcyclicGraph<>))]
 internal sealed class WhenCheckingForPaths
 {
     private const string MISSING = "missing";

@@ -61,11 +61,121 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
         return source == target || HasPathCore(target, source);
     }
 
+    /// <summary>Adds the batch only if the graph plus every new edge in it stays acyclic.</summary>
+    private protected override int AddEdgesCore(IReadOnlyList<Edge<TNode>> edges)
+    {
+        ThrowIfBatchCreatesCycle(edges);
+        return AddEdgesWithoutChecks(edges, checkEachEdge: false);
+    }
+
     private protected override void OnAddingEdge(TNode source, TNode target)
     {
         if (WouldCreateCycle(source, target))
         {
             ThrowHelper.ThrowCycle(source, target);
+        }
+    }
+
+    /// <summary>
+    /// Runs Kahn's algorithm over the current graph plus the batch's new edges, giving missing endpoints provisional
+    /// indices past <see cref="NodeTable{TNode}.SlotLimit"/>. The combined graph is acyclic exactly when every node is
+    /// dequeued. O(V + E + k) for a batch of k edges; nothing is changed.
+    /// </summary>
+    private void ThrowIfBatchCreatesCycle(IReadOnlyList<Edge<TNode>> edges)
+    {
+        var slotLimit = NodeTable.SlotLimit;
+        var provisional = new Dictionary<TNode, int>(Comparer);
+        var newEdges = new HashSet<(int Source, int Target)>();
+        foreach (var edge in edges)
+        {
+            var source = IndexOf(edge.Source);
+            var target = IndexOf(edge.Target);
+            if (source == target)
+            {
+                ThrowHelper.ThrowCycle(edge.Source, edge.Target);
+            }
+
+            if (source >= slotLimit || target >= slotLimit || !Adjacency[source].Contains(target))
+            {
+                newEdges.Add((source, target));
+            }
+        }
+
+        if (newEdges.Count == 0)
+        {
+            return;
+        }
+
+        var total = slotLimit + provisional.Count;
+        var inDegrees = new int[total];
+        var extraSuccessors = new List<int>?[total];
+        for (var slot = 0; slot < slotLimit; slot++)
+        {
+            if (NodeTable.IsOccupied(slot))
+            {
+                inDegrees[slot] = Predecessors[slot].Count;
+            }
+        }
+
+        foreach (var (source, target) in newEdges)
+        {
+            inDegrees[target]++;
+            (extraSuccessors[source] ??= []).Add(target);
+        }
+
+        var ready = new Queue<int>();
+        for (var index = 0; index < total; index++)
+        {
+            if ((index >= slotLimit || NodeTable.IsOccupied(index)) && inDegrees[index] == 0)
+            {
+                ready.Enqueue(index);
+            }
+        }
+
+        var processed = 0;
+        while (ready.Count > 0)
+        {
+            var index = ready.Dequeue();
+            processed++;
+            if (index < slotLimit)
+            {
+                foreach (var successor in Adjacency[index])
+                {
+                    if (--inDegrees[successor] == 0)
+                    {
+                        ready.Enqueue(successor);
+                    }
+                }
+            }
+
+            foreach (var successor in extraSuccessors[index] ?? [])
+            {
+                if (--inDegrees[successor] == 0)
+                {
+                    ready.Enqueue(successor);
+                }
+            }
+        }
+
+        if (processed < NodeCount + provisional.Count)
+        {
+            throw new GraphCycleException("Adding the edges would create a cycle.");
+        }
+
+        int IndexOf(TNode node)
+        {
+            if (NodeTable.TryGetSlot(node, out var slot))
+            {
+                return slot;
+            }
+
+            if (!provisional.TryGetValue(node, out var index))
+            {
+                index = slotLimit + provisional.Count;
+                provisional.Add(node, index);
+            }
+
+            return index;
         }
     }
 }

@@ -128,7 +128,7 @@ public abstract class Graph<TNode> : IGraph<TNode>
     {
         ThrowHelper.ThrowIfNull(source);
         ThrowHelper.ThrowIfNull(target);
-        return AddValidatedEdge(source, target);
+        return AddValidatedEdge(source, target, checkEdge: true);
     }
 
     /// <inheritdoc/>
@@ -177,10 +177,19 @@ public abstract class Graph<TNode> : IGraph<TNode>
     /// <returns>The number of edges actually added.</returns>
     private protected virtual int AddEdgesCore(IReadOnlyList<Edge<TNode>> edges)
     {
+        return AddEdgesWithoutChecks(edges, checkEachEdge: true);
+    }
+
+    /// <summary>
+    /// Adds a batch of edges with non-null endpoints. When <paramref name="checkEachEdge"/> is
+    /// <see langword="false"/>, the caller has already vetted the whole batch, so <see cref="OnAddingEdge"/> is skipped.
+    /// </summary>
+    private protected int AddEdgesWithoutChecks(IReadOnlyList<Edge<TNode>> edges, bool checkEachEdge)
+    {
         var added = 0;
         foreach (var edge in edges)
         {
-            if (AddValidatedEdge(edge.Source, edge.Target))
+            if (AddValidatedEdge(edge.Source, edge.Target, checkEachEdge))
             {
                 added++;
             }
@@ -253,14 +262,18 @@ public abstract class Graph<TNode> : IGraph<TNode>
         Adjacency[slot] ??= [];
     }
 
-    private bool AddValidatedEdge(TNode source, TNode target)
+    private bool AddValidatedEdge(TNode source, TNode target, bool checkEdge)
     {
         if (TryFindEdge(source, target, out _, out _))
         {
             return false;
         }
 
-        OnAddingEdge(source, target);
+        if (checkEdge)
+        {
+            OnAddingEdge(source, target);
+        }
+
         AddEdgeCore(GetOrAddSlot(source), GetOrAddSlot(target));
         NodeTable.IncrementVersion();
         return true;

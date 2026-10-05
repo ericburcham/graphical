@@ -7,9 +7,14 @@ namespace Graphical;
 public abstract class Graph<TNode> : IGraph<TNode>
     where TNode : notnull
 {
-    private protected Graph(IEqualityComparer<TNode>? comparer)
+    private protected Graph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
     {
-        NodeTable = new NodeTable<TNode>(0, comparer ?? EqualityComparer<TNode>.Default);
+        if (nodeCapacity < 0)
+        {
+            ThrowHelper.ThrowNegativeCapacity(nodeCapacity);
+        }
+
+        NodeTable = new NodeTable<TNode>(nodeCapacity, comparer ?? EqualityComparer<TNode>.Default);
         Nodes = new NodeCollection<TNode>(NodeTable);
         Edges = new EdgeCollection<TNode>(this);
     }

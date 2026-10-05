@@ -3,6 +3,7 @@ using AwesomeAssertions;
 namespace Graphical.UnitTests.IGraphTests;
 
 [TestFixture(typeof(UndirectedGraph<>))]
+[TestFixture(typeof(DirectedGraph<>))]
 internal sealed class WhenAddingADuplicateEdge
 {
     private const string SOURCE = "a";

@@ -3,6 +3,7 @@ using AwesomeAssertions;
 namespace Graphical.UnitTests.IGraphTests;
 
 [TestFixture(typeof(UndirectedGraph<>))]
+[TestFixture(typeof(DirectedGraph<>))]
 internal sealed class WhenQueryingTheNeighborsOfConnectedNodes
 {
     private const string HUB = "hub";

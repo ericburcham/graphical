@@ -35,6 +35,12 @@ internal static class GraphFactory
         return (IDirectedGraph<TNode>)Construct<TNode>(openGraphType);
     }
 
+    public static IDirectedAcyclicGraph<TNode> CreateAcyclic<TNode>(Type openGraphType)
+        where TNode : notnull
+    {
+        return (IDirectedAcyclicGraph<TNode>)Construct<TNode>(openGraphType);
+    }
+
     private static IGraph<TNode> Construct<TNode>(Type openGraphType, params object?[] arguments)
         where TNode : notnull
     {

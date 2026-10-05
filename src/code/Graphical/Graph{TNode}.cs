@@ -189,6 +189,14 @@ public abstract class Graph<TNode> : IGraph<TNode>
         return added;
     }
 
+    /// <summary>
+    /// Called before a new edge is added and before any missing endpoint is added; throw an
+    /// <see cref="InvalidOperationException"/>-derived exception to reject the edge and leave the graph unchanged.
+    /// </summary>
+    private protected virtual void OnAddingEdge(TNode source, TNode target)
+    {
+    }
+
     /// <summary>Adds an edge between two existing slots that are not yet connected, and counts it.</summary>
     private protected abstract void AddEdgeCore(int source, int target);
 
@@ -252,6 +260,7 @@ public abstract class Graph<TNode> : IGraph<TNode>
             return false;
         }
 
+        OnAddingEdge(source, target);
         AddEdgeCore(GetOrAddSlot(source), GetOrAddSlot(target));
         NodeTable.IncrementVersion();
         return true;

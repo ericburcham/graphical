@@ -11,3 +11,5 @@ Judgment calls made while implementing `docs/graph-types-spec.md`. One entry per
 5. **`AddEdges` and `AddNodes` copy the batch into a list and validate every item before changing anything**, so no graph type is left half-updated by an argument error.
 
 ## Implementation decisions
+- **Test packages:** NUnit 4.6.1 (latest 4.x; 5.0.0 exists but the spec requires 4.x), NUnit3TestAdapter 6.3.0 (supports net462+ and net8+ per its README), Microsoft.NET.Test.Sdk 18.10.1, NUnit.Analyzers 4.15.0, FluentAssertions 7.2.2 (latest 7.x). `coverlet.collector` is kept (already referenced) and upgraded to 10.1.0.
+- **`LangVersion` latest set in the test project during milestone 1**, because the `net48` target otherwise defaults to C# 7.3 and rejects nullable and file-scoped namespaces. It moves to `Directory.Build.props` in milestone 2.

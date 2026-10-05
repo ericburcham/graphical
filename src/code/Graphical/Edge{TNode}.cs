@@ -6,8 +6,10 @@ namespace Graphical;
 /// <summary>A directed pair of nodes: an edge from <see cref="Source"/> to <see cref="Target"/>.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
 /// <remarks>
-/// Edge equality is ordered and always compares endpoints with <see cref="EqualityComparer{T}.Default"/>,
-/// even when the edge came from a graph that uses a custom node comparer.
+/// Edge equality is ordered, so <c>(a -&gt; b)</c> and <c>(b -&gt; a)</c> differ, and it always compares endpoints
+/// with <see cref="EqualityComparer{T}.Default"/>, even when the edge came from a graph whose
+/// <see cref="IReadOnlyGraph{TNode}.Comparer"/> is different. <c>default(Edge&lt;TNode&gt;)</c> has
+/// <see langword="null"/> endpoints when <typeparamref name="TNode"/> is a reference type.
 /// </remarks>
 public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
     where TNode : notnull
@@ -15,6 +17,7 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
     /// <summary>Creates an edge from <paramref name="source"/> to <paramref name="target"/>.</summary>
     /// <param name="source">The node the edge starts at.</param>
     /// <param name="target">The node the edge ends at.</param>
+    /// <remarks>O(1). The endpoints are not validated; a graph rejects an edge with a <see langword="null"/> endpoint when it is added.</remarks>
     public Edge(TNode source, TNode target)
     {
         Source = source;
@@ -22,9 +25,11 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
     }
 
     /// <summary>Gets the node the edge starts at.</summary>
+    /// <remarks>O(1).</remarks>
     public TNode Source { get; }
 
     /// <summary>Gets the node the edge ends at.</summary>
+    /// <remarks>O(1).</remarks>
     public TNode Target { get; }
 
     /// <summary>Returns the edge pointing the other way, from <see cref="Target"/> to <see cref="Source"/>.</summary>
@@ -86,6 +91,7 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
     /// <param name="left">The first edge.</param>
     /// <param name="right">The second edge.</param>
     /// <returns><see langword="true"/> if the edges are equal; otherwise <see langword="false"/>.</returns>
+    /// <remarks>O(1) plus the cost of comparing two pairs of nodes.</remarks>
     public static bool operator ==(Edge<TNode> left, Edge<TNode> right)
     {
         return left.Equals(right);
@@ -95,6 +101,7 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
     /// <param name="left">The first edge.</param>
     /// <param name="right">The second edge.</param>
     /// <returns><see langword="true"/> if the edges are not equal; otherwise <see langword="false"/>.</returns>
+    /// <remarks>O(1) plus the cost of comparing two pairs of nodes.</remarks>
     public static bool operator !=(Edge<TNode> left, Edge<TNode> right)
     {
         return !left.Equals(right);

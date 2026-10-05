@@ -14,6 +14,7 @@ public class GraphCycleException : InvalidOperationException
     private const string DEFAULT_MESSAGE = "The operation would create a cycle in the graph.";
 
     /// <summary>Creates an exception with a default message.</summary>
+    /// <remarks>O(1).</remarks>
     public GraphCycleException()
         : base(DEFAULT_MESSAGE)
     {
@@ -21,6 +22,7 @@ public class GraphCycleException : InvalidOperationException
 
     /// <summary>Creates an exception with the given message.</summary>
     /// <param name="message">The message that describes the error.</param>
+    /// <remarks>O(1).</remarks>
     public GraphCycleException(string? message)
         : base(message)
     {
@@ -29,6 +31,7 @@ public class GraphCycleException : InvalidOperationException
     /// <summary>Creates an exception with the given message and inner exception.</summary>
     /// <param name="message">The message that describes the error.</param>
     /// <param name="innerException">The exception that caused this one, if any.</param>
+    /// <remarks>O(1).</remarks>
     public GraphCycleException(string? message, Exception? innerException)
         : base(message, innerException)
     {

@@ -13,6 +13,7 @@ public interface IReadOnlyDirectedGraph<TNode> : IReadOnlyGraph<TNode>
     /// <returns>The successors.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
     /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    /// <remarks>O(1) to get the view; enumerating it is O(out-degree). If the node is later removed, the view is empty.</remarks>
     IReadOnlyCollection<TNode> GetSuccessors(TNode node);
 
     /// <summary>Gets a live read-only view of the nodes that have an edge to <paramref name="node"/>.</summary>
@@ -20,6 +21,7 @@ public interface IReadOnlyDirectedGraph<TNode> : IReadOnlyGraph<TNode>
     /// <returns>The predecessors.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
     /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    /// <remarks>O(1) to get the view; enumerating it is O(in-degree). If the node is later removed, the view is empty.</remarks>
     IReadOnlyCollection<TNode> GetPredecessors(TNode node);
 
     /// <summary>Gets the number of edges that end at <paramref name="node"/>.</summary>
@@ -27,6 +29,7 @@ public interface IReadOnlyDirectedGraph<TNode> : IReadOnlyGraph<TNode>
     /// <returns>The in-degree.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
     /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    /// <remarks>O(1).</remarks>
     int GetInDegree(TNode node);
 
     /// <summary>Gets the number of edges that start at <paramref name="node"/>.</summary>
@@ -34,14 +37,17 @@ public interface IReadOnlyDirectedGraph<TNode> : IReadOnlyGraph<TNode>
     /// <returns>The out-degree.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
     /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    /// <remarks>O(1).</remarks>
     int GetOutDegree(TNode node);
 
     /// <summary>Gets the nodes that no edge ends at (in-degree 0), in slot order.</summary>
     /// <returns>A snapshot: later changes to the graph do not affect it.</returns>
+    /// <remarks>O(V).</remarks>
     IReadOnlyCollection<TNode> GetSources();
 
     /// <summary>Gets the nodes that no edge starts at (out-degree 0), in slot order.</summary>
     /// <returns>A snapshot: later changes to the graph do not affect it.</returns>
+    /// <remarks>O(V).</remarks>
     IReadOnlyCollection<TNode> GetSinks();
 
     /// <summary>Determines whether a path of one or more edges leads from <paramref name="source"/> to <paramref name="target"/>.</summary>
@@ -52,5 +58,6 @@ public interface IReadOnlyDirectedGraph<TNode> : IReadOnlyGraph<TNode>
     /// missing. A node has a path to itself only through a cycle.
     /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="target"/> is <see langword="null"/>.</exception>
+    /// <remarks>O(V + E) (an iterative breadth-first search) for <see cref="DirectedGraph{TNode}"/> and <see cref="DirectedAcyclicGraph{TNode}"/>; O(1) for <see cref="ReachabilityDirectedAcyclicGraph{TNode}"/>.</remarks>
     bool HasPath(TNode source, TNode target);
 }

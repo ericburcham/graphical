@@ -6,6 +6,11 @@ namespace Graphical;
 
 /// <summary>A graph whose edges point from a source node to a target node. Cycles and self-loops are allowed.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
+/// <remarks>
+/// <para>
+/// Not thread-safe for mutation: concurrent reads with no writer are safe, but any write requires exclusive access.
+/// </para>
+/// </remarks>
 [DebuggerDisplay("NodeCount = {NodeCount}, EdgeCount = {EdgeCount}")]
 public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     where TNode : notnull
@@ -17,6 +22,7 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     // protected), so deriving from DirectedGraph<TNode> outside this assembly cannot reach anything new.
 #pragma warning disable RS0022
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
+    /// <remarks>O(1).</remarks>
     public DirectedGraph()
         : this(0, null)
     {
@@ -25,6 +31,7 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     /// <summary>Creates an empty graph with room for <paramref name="nodeCapacity"/> nodes before it grows.</summary>
     /// <param name="nodeCapacity">The number of nodes the graph can hold before it grows.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
+    /// <remarks>O(<paramref name="nodeCapacity"/>).</remarks>
     public DirectedGraph(int nodeCapacity)
         : this(nodeCapacity, null)
     {
@@ -32,6 +39,7 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
 
     /// <summary>Creates an empty graph that compares nodes with <paramref name="comparer"/>.</summary>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
+    /// <remarks>O(1).</remarks>
     public DirectedGraph(IEqualityComparer<TNode>? comparer)
         : this(0, comparer)
     {
@@ -41,6 +49,7 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     /// <param name="nodeCapacity">The number of nodes the graph can hold before it grows.</param>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
+    /// <remarks>O(<paramref name="nodeCapacity"/>).</remarks>
     public DirectedGraph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
         : base(isDirected: true, nodeCapacity, comparer)
     {

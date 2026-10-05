@@ -21,4 +21,9 @@ public interface IReadOnlyGraph<TNode>
 
     /// <summary>Gets a live read-only view of the edges in the graph.</summary>
     IReadOnlyCollection<Edge<TNode>> Edges { get; }
+
+    /// <summary>Determines whether the graph contains <paramref name="node"/>.</summary>
+    /// <param name="node">The node to look for.</param>
+    /// <returns><see langword="true"/> if the graph contains the node; otherwise <see langword="false"/>.</returns>
+    bool ContainsNode(TNode node);
 }

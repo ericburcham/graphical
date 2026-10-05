@@ -15,5 +15,6 @@ public interface IReadOnlyUndirectedGraph<TNode> : IReadOnlyGraph<TNode>
     /// <see langword="false"/> otherwise, including when either node is missing.
     /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is <see langword="null"/>.</exception>
+    /// <remarks>O(V + E): an iterative breadth-first search.</remarks>
     bool AreConnected(TNode first, TNode second);
 }

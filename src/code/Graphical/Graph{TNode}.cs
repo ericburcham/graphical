@@ -6,6 +6,17 @@ namespace Graphical;
 
 /// <summary>The base class for every graph in this library: node storage, edge counting and live views.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
+/// <remarks>
+/// <para>
+/// Only this library can derive from <see cref="Graph{TNode}"/>. Use <see cref="UndirectedGraph{TNode}"/>,
+/// <see cref="DirectedGraph{TNode}"/>, <see cref="DirectedAcyclicGraph{TNode}"/> or
+/// <see cref="ReachabilityDirectedAcyclicGraph{TNode}"/>, and accept the interfaces (<see cref="IGraph{TNode}"/> and
+/// its relatives) in your own APIs.
+/// </para>
+/// <para>
+/// Not thread-safe for mutation: concurrent reads with no writer are safe, but any write requires exclusive access.
+/// </para>
+/// </remarks>
 public abstract class Graph<TNode> : IGraph<TNode>
     where TNode : notnull
 {

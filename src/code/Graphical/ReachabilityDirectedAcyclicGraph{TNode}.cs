@@ -8,6 +8,18 @@ namespace Graphical;
 /// A directed acyclic graph that maintains its transitive closure, so reachability queries are answered in O(1).
 /// </summary>
 /// <typeparam name="TNode">The node type.</typeparam>
+/// <remarks>
+/// <para>
+/// A drop-in replacement for <see cref="DirectedAcyclicGraph{TNode}"/> with the same API and behavior.
+/// <see cref="DirectedGraph{TNode}.HasPath"/> and <see cref="DirectedAcyclicGraph{TNode}.WouldCreateCycle"/> are
+/// O(1), and ancestor and descendant queries read a bit set instead of traversing. In exchange, adding and removing
+/// edges and nodes costs more, and the closure takes two bits per pair of slots: about V²/4 bytes (1,000 nodes
+/// ≈ 250 KB, 10,000 ≈ 25 MB, 100,000 ≈ 2.5 GB).
+/// </para>
+/// <para>
+/// Not thread-safe for mutation: concurrent reads with no writer are safe, but any write requires exclusive access.
+/// </para>
+/// </remarks>
 [DebuggerDisplay("NodeCount = {NodeCount}, EdgeCount = {EdgeCount}")]
 public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGraph<TNode>
     where TNode : notnull
@@ -25,6 +37,7 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
     private bool _deferClosureUpdates;
 
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
+    /// <remarks>O(1).</remarks>
     public ReachabilityDirectedAcyclicGraph()
         : this(0, null)
     {
@@ -33,6 +46,7 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
     /// <summary>Creates an empty graph with room for <paramref name="nodeCapacity"/> nodes before it grows.</summary>
     /// <param name="nodeCapacity">The number of nodes the graph can hold before it grows.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
+    /// <remarks>O(<paramref name="nodeCapacity"/>).</remarks>
     public ReachabilityDirectedAcyclicGraph(int nodeCapacity)
         : this(nodeCapacity, null)
     {
@@ -40,6 +54,7 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
 
     /// <summary>Creates an empty graph that compares nodes with <paramref name="comparer"/>.</summary>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
+    /// <remarks>O(1).</remarks>
     public ReachabilityDirectedAcyclicGraph(IEqualityComparer<TNode>? comparer)
         : this(0, comparer)
     {
@@ -49,6 +64,7 @@ public sealed class ReachabilityDirectedAcyclicGraph<TNode> : DirectedAcyclicGra
     /// <param name="nodeCapacity">The number of nodes the graph can hold before it grows.</param>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
+    /// <remarks>O(<paramref name="nodeCapacity"/>).</remarks>
     public ReachabilityDirectedAcyclicGraph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
         : base(nodeCapacity, comparer)
     {

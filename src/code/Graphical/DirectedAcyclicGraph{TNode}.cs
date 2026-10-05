@@ -7,6 +7,17 @@ namespace Graphical;
 
 /// <summary>A directed graph that rejects any edge that would create a cycle, including self-loops.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
+/// <remarks>
+/// <para>
+/// <see cref="Graph{TNode}.AddEdge"/> throws <see cref="GraphCycleException"/> for a cycle-creating edge and leaves
+/// the graph unchanged, without adding missing endpoints. <see cref="Graph{TNode}.AddEdges"/> is atomic: if any edge
+/// in the batch would create a cycle, even together with other edges in the batch, nothing is added. Reachability
+/// queries traverse the graph; use <see cref="ReachabilityDirectedAcyclicGraph{TNode}"/> when they dominate.
+/// </para>
+/// <para>
+/// Not thread-safe for mutation: concurrent reads with no writer are safe, but any write requires exclusive access.
+/// </para>
+/// </remarks>
 [DebuggerDisplay("NodeCount = {NodeCount}, EdgeCount = {EdgeCount}")]
 public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcyclicGraph<TNode>
     where TNode : notnull
@@ -18,6 +29,7 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
     private int _topologicalOrderVersion = -1;
 
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
+    /// <remarks>O(1).</remarks>
     public DirectedAcyclicGraph()
         : this(0, null)
     {
@@ -26,6 +38,7 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
     /// <summary>Creates an empty graph with room for <paramref name="nodeCapacity"/> nodes before it grows.</summary>
     /// <param name="nodeCapacity">The number of nodes the graph can hold before it grows.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
+    /// <remarks>O(<paramref name="nodeCapacity"/>).</remarks>
     public DirectedAcyclicGraph(int nodeCapacity)
         : this(nodeCapacity, null)
     {
@@ -33,6 +46,7 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
 
     /// <summary>Creates an empty graph that compares nodes with <paramref name="comparer"/>.</summary>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
+    /// <remarks>O(1).</remarks>
     public DirectedAcyclicGraph(IEqualityComparer<TNode>? comparer)
         : this(0, comparer)
     {
@@ -42,6 +56,7 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
     /// <param name="nodeCapacity">The number of nodes the graph can hold before it grows.</param>
     /// <param name="comparer">The node comparer, or <see langword="null"/> for <see cref="EqualityComparer{T}.Default"/>.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="nodeCapacity"/> is negative.</exception>
+    /// <remarks>O(<paramref name="nodeCapacity"/>).</remarks>
     public DirectedAcyclicGraph(int nodeCapacity, IEqualityComparer<TNode>? comparer)
         : base(nodeCapacity, comparer)
     {

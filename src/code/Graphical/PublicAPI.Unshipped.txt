@@ -56,3 +56,5 @@ Graphical.IReadOnlyGraph<TNode>.GetDegree(TNode node) -> int
 Graphical.IReadOnlyGraph<TNode>.GetNeighbors(TNode node) -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.Graph<TNode>.RemoveEdge(TNode source, TNode target) -> bool
 Graphical.IGraph<TNode>.RemoveEdge(TNode source, TNode target) -> bool
+Graphical.Graph<TNode>.RemoveNode(TNode node) -> bool
+Graphical.IGraph<TNode>.RemoveNode(TNode node) -> bool

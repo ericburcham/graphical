@@ -23,6 +23,7 @@ internal sealed class WhenPassingANullNode
         _exceptions[nameof(graph.AddNode)] = Catch.Exception(() => graph.AddNode(null!));
         _exceptions[nameof(graph.ContainsNode)] = Catch.Exception(() => graph.ContainsNode(null!));
         _exceptions[nameof(graph.GetNeighbors)] = Catch.Exception(() => graph.GetNeighbors(null!));
+        _exceptions[nameof(graph.RemoveNode)] = Catch.Exception(() => graph.RemoveNode(null!));
         _exceptions[nameof(graph.GetDegree)] = Catch.Exception(() => graph.GetDegree(null!));
     }
 
@@ -30,6 +31,7 @@ internal sealed class WhenPassingANullNode
     [TestCase(nameof(IGraph<string>.ContainsNode))]
     [TestCase(nameof(IGraph<string>.GetNeighbors))]
     [TestCase(nameof(IGraph<string>.GetDegree))]
+    [TestCase(nameof(IGraph<string>.RemoveNode))]
     public void TheMemberShouldThrowArgumentNullExceptionNamingTheNode(string member)
     {
         _exceptions[member].Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("node");

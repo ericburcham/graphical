@@ -7,7 +7,7 @@ namespace Graphical;
 /// <summary>A graph whose edges point from a source node to a target node. Cycles and self-loops are allowed.</summary>
 /// <typeparam name="TNode">The node type.</typeparam>
 [DebuggerDisplay("NodeCount = {NodeCount}, EdgeCount = {EdgeCount}")]
-public class DirectedGraph<TNode> : Graph<TNode>
+public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     where TNode : notnull
 {
     private HashSet<int>[] _predecessors;
@@ -48,14 +48,28 @@ public class DirectedGraph<TNode> : Graph<TNode>
     }
 #pragma warning restore RS0022
 
-    /// <summary>Gets a live read-only view of the nodes that <paramref name="node"/> has an edge to.</summary>
-    /// <param name="node">The node whose successors to get.</param>
-    /// <returns>The successors.</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
-    /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    /// <inheritdoc/>
     public IReadOnlyCollection<TNode> GetSuccessors(TNode node)
     {
         return new SlotSetView<TNode>(NodeTable, () => Adjacency, GetSlot(node));
+    }
+
+    /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> GetPredecessors(TNode node)
+    {
+        return new SlotSetView<TNode>(NodeTable, () => _predecessors, GetSlot(node));
+    }
+
+    /// <inheritdoc/>
+    public int GetInDegree(TNode node)
+    {
+        return _predecessors[GetSlot(node)].Count;
+    }
+
+    /// <inheritdoc/>
+    public int GetOutDegree(TNode node)
+    {
+        return Adjacency[GetSlot(node)].Count;
     }
 
     private protected override void RemoveNodeCore(int slot)

@@ -29,6 +29,12 @@ internal static class GraphFactory
         return Construct<TNode>(openGraphType, nodeCapacity, comparer);
     }
 
+    public static IDirectedGraph<TNode> CreateDirected<TNode>(Type openGraphType)
+        where TNode : notnull
+    {
+        return (IDirectedGraph<TNode>)Construct<TNode>(openGraphType);
+    }
+
     private static IGraph<TNode> Construct<TNode>(Type openGraphType, params object?[] arguments)
         where TNode : notnull
     {

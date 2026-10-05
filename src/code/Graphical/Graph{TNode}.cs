@@ -52,11 +52,7 @@ public abstract class Graph<TNode> : IGraph<TNode>
     /// <inheritdoc/>
     public bool ContainsEdge(TNode source, TNode target)
     {
-        ThrowHelper.ThrowIfNull(source);
-        ThrowHelper.ThrowIfNull(target);
-        return NodeTable.TryGetSlot(source, out var sourceSlot)
-            && NodeTable.TryGetSlot(target, out var targetSlot)
-            && Adjacency[sourceSlot].Contains(targetSlot);
+        return TryGetEdgeSlots(source, target, out _, out _);
     }
 
     /// <inheritdoc/>
@@ -102,13 +98,11 @@ public abstract class Graph<TNode> : IGraph<TNode>
     /// <inheritdoc/>
     public bool RemoveEdge(TNode source, TNode target)
     {
-        if (!ContainsEdge(source, target))
+        if (!TryGetEdgeSlots(source, target, out var sourceSlot, out var targetSlot))
         {
             return false;
         }
 
-        NodeTable.TryGetSlot(source, out var sourceSlot);
-        NodeTable.TryGetSlot(target, out var targetSlot);
         RemoveEdgeCore(sourceSlot, targetSlot);
         NodeTable.IncrementVersion();
         return true;
@@ -157,6 +151,17 @@ public abstract class Graph<TNode> : IGraph<TNode>
     private protected virtual void OnNodeAdded(int slot)
     {
         Adjacency[slot] ??= [];
+    }
+
+    /// <summary>Validates both endpoints and finds their slots when both exist and are joined by an edge.</summary>
+    private bool TryGetEdgeSlots(TNode source, TNode target, out int sourceSlot, out int targetSlot)
+    {
+        ThrowHelper.ThrowIfNull(source);
+        ThrowHelper.ThrowIfNull(target);
+        targetSlot = -1;
+        return NodeTable.TryGetSlot(source, out sourceSlot)
+            && NodeTable.TryGetSlot(target, out targetSlot)
+            && Adjacency[sourceSlot].Contains(targetSlot);
     }
 
     private int GetOrAddSlot(TNode node)

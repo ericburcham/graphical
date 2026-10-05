@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace Graphical;
@@ -10,6 +11,12 @@ namespace Graphical;
 public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcyclicGraph<TNode>
     where TNode : notnull
 {
+    private int[] _topologicalSlots = [];
+
+    private ReadOnlyCollection<TNode>? _topologicalOrder;
+
+    private int _topologicalOrderVersion = -1;
+
     /// <summary>Creates an empty graph that compares nodes with <see cref="EqualityComparer{T}.Default"/>.</summary>
     public DirectedAcyclicGraph()
         : this(0, null)
@@ -41,6 +48,24 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
     }
 
     /// <inheritdoc/>
+    public IReadOnlyList<TNode> GetTopologicalOrder()
+    {
+        var slots = GetTopologicalSlots();
+        if (_topologicalOrder is null)
+        {
+            var nodes = new TNode[slots.Length];
+            for (var index = 0; index < slots.Length; index++)
+            {
+                nodes[index] = NodeTable[slots[index]];
+            }
+
+            _topologicalOrder = new ReadOnlyCollection<TNode>(nodes);
+        }
+
+        return _topologicalOrder;
+    }
+
+    /// <inheritdoc/>
     public bool WouldCreateCycle(TNode source, TNode target)
     {
         ThrowHelper.ThrowIfNull(source);
@@ -53,6 +78,54 @@ public class DirectedAcyclicGraph<TNode> : DirectedGraph<TNode>, IDirectedAcycli
         return NodeTable.TryGetSlot(source, out var sourceSlot)
             && NodeTable.TryGetSlot(target, out var targetSlot)
             && WouldCreateCycleCore(sourceSlot, targetSlot);
+    }
+
+    /// <summary>
+    /// Gets the slots in topological order: Kahn's algorithm with a <see cref="MinHeap"/> keyed on insertion sequence,
+    /// cached until the graph's version changes.
+    /// </summary>
+    private protected int[] GetTopologicalSlots()
+    {
+        if (_topologicalOrderVersion == Version)
+        {
+            return _topologicalSlots;
+        }
+
+        var inDegrees = new int[NodeTable.SlotLimit];
+        var ready = new MinHeap();
+        for (var slot = 0; slot < NodeTable.SlotLimit; slot++)
+        {
+            if (!NodeTable.IsOccupied(slot))
+            {
+                continue;
+            }
+
+            inDegrees[slot] = Predecessors[slot].Count;
+            if (inDegrees[slot] == 0)
+            {
+                ready.Push(slot, NodeTable.GetSequence(slot));
+            }
+        }
+
+        var order = new int[NodeCount];
+        var count = 0;
+        while (ready.TryPop(out var slot))
+        {
+            order[count++] = slot;
+            foreach (var successor in Adjacency[slot])
+            {
+                if (--inDegrees[successor] == 0)
+                {
+                    ready.Push(successor, NodeTable.GetSequence(successor));
+                }
+            }
+        }
+
+        Debug.Assert(count == order.Length, "A directed acyclic graph always has a complete topological order.");
+        _topologicalSlots = order;
+        _topologicalOrder = null;
+        _topologicalOrderVersion = Version;
+        return order;
     }
 
     /// <summary>An edge closes a cycle when it is a self-loop or its target already reaches its source.</summary>

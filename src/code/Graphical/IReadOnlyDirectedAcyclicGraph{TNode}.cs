@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Graphical;
 
@@ -7,6 +8,13 @@ namespace Graphical;
 public interface IReadOnlyDirectedAcyclicGraph<TNode> : IReadOnlyDirectedGraph<TNode>
     where TNode : notnull
 {
+    /// <summary>Gets every node ordered so that each edge's source comes before its target.</summary>
+    /// <returns>
+    /// A read-only snapshot. Ties are broken by insertion order (earlier-added nodes first), so identical sequences of
+    /// operations always produce identical orders. An unchanged graph may return the same cached instance.
+    /// </returns>
+    IReadOnlyList<TNode> GetTopologicalOrder();
+
     /// <summary>Determines whether adding an edge from <paramref name="source"/> to <paramref name="target"/> would create a cycle.</summary>
     /// <param name="source">The node the edge would start at.</param>
     /// <param name="target">The node the edge would end at.</param>

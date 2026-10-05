@@ -6,7 +6,7 @@ This spec is your complete brief for this work. Where it conflicts with the exis
 
 - Repository root: `D:\src\graphical`. The branch `create-graph-types` already exists (created from `develop`) and is checked out. All work happens on this branch.
 - **Existing library.** `src/code/Graphical/DirectedGraph.cs` defines `DirectedGraph<T>`, which stores neighbours in a `Dictionary<T, HashSet<T>>` and exposes `AddVertex`, `AddEdge`, `GetVertices`, and `GetNeighbors`, with no input validation. The project targets `netstandard2.1`, with nullable reference types on and warnings treated as errors.
-- **Existing tests.** NUnit 3.13 with FluentAssertions 6.8 on `net6.0`. They don't run on this machine because the .NET 6 runtime isn't installed; the .NET 8, 9, and 10 SDKs are.
+- **Existing tests.** NUnit 3.13 with a fluent assertion library (since replaced by AwesomeAssertions) on `net6.0`. They don't run on this machine because the .NET 6 runtime isn't installed; the .NET 8, 9, and 10 SDKs are.
 - **What changes.** This spec replaces the vertex-based `DirectedGraph<T>` with a new family of graph types. The repo's current code has never shipped, so replace the old API outright, with no compatibility shims, and migrate its tests to the new API.
 - **Package history.** The NuGet ID `Graphical` already has versions 1.0.0–1.0.2 (2018, `net47`) from an older, unrelated codebase. This work is version 2.0, a ground-up rewrite with no compatibility obligations to 1.x.
 - **Remote:** `https://github.com/ericburcham/graphical` (public, MIT-licensed, default branch `main`). Keep the existing `LICENSE` and `.github/` content as they are.
@@ -35,7 +35,7 @@ Build every library behavior with this cycle: Think (often omitted) → Red → 
 ### Tools
 
 - **Serena:** use its symbol-level tools to explore the existing code, find references, and do cross-file renames and refactors, such as the vertex → node migration. Activate the project in Serena first if it isn't already. Fall back to ordinary file tools for anything Serena can't do.
-- **Context7:** check current documentation before adding or upgrading a package, and whenever you rely on an API you aren't sure of. That includes NUnit 4, FluentAssertions 7, PolySharp, Microsoft.CodeAnalysis.PublicApiAnalyzers, BenchmarkDotNet, and MSBuild/SDK properties. Confirm the latest stable versions with `dotnet package search <name> --exact-match`.
+- **Context7:** check current documentation before adding or upgrading a package, and whenever you rely on an API you aren't sure of. That includes NUnit 4, AwesomeAssertions, PolySharp, Microsoft.CodeAnalysis.PublicApiAnalyzers, BenchmarkDotNet, and MSBuild/SDK properties. Confirm the latest stable versions with `dotnet package search <name> --exact-match`.
 - **Installing prerequisites:** if something required is missing, install it with winget.
   - Find the exact ID with `winget search`, then run `winget install -e --id <Id> --accept-source-agreements --accept-package-agreements`.
   - Don't install the .NET 6 runtime; the tests are being retargeted instead.
@@ -96,8 +96,8 @@ Work through these in order. Each one ends with a clean build and every test pas
 ## Tests: framework and conventions
 
 - **Packages.**
-  - Upgrade NUnit to the latest stable 4.x, with matching NUnit3TestAdapter and Microsoft.NET.Test.Sdk. Write all assertions with FluentAssertions, since NUnit 4 moved the classic asserts.
-  - Upgrade FluentAssertions to the latest 7.x. Don't move to 8.x, which requires a paid commercial license.
+  - Upgrade NUnit to the latest stable 4.x, with matching NUnit3TestAdapter and Microsoft.NET.Test.Sdk. Write all assertions with AwesomeAssertions, since NUnit 4 moved the classic asserts.
+  - Use the latest stable AwesomeAssertions (the Apache-2.0 community fork with the same API) that supports both `net10.0` and `net48`. Its namespaces are `AwesomeAssertions…` from version 9 on.
 - **Keep the existing conventions:**
   - One fixture per scenario, named `When…`, in a folder per class under test (e.g. `EdgeTests/`, `UndirectedGraphTests/`, `DirectedGraphTests/`).
   - The scenario runs once in `[OneTimeSetUp]`, and its results go into fields. Capture expected exceptions into a field too, so each assertion stays in its own test.

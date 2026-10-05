@@ -24,3 +24,18 @@ Graphical.GraphCycleException
 Graphical.GraphCycleException.GraphCycleException() -> void
 Graphical.GraphCycleException.GraphCycleException(string? message) -> void
 Graphical.GraphCycleException.GraphCycleException(string? message, System.Exception? innerException) -> void
+Graphical.Graph<TNode>
+Graphical.Graph<TNode>.Comparer.get -> System.Collections.Generic.IEqualityComparer<TNode>!
+Graphical.Graph<TNode>.EdgeCount.get -> int
+Graphical.Graph<TNode>.Edges.get -> System.Collections.Generic.IReadOnlyCollection<Graphical.Edge<TNode>>!
+Graphical.Graph<TNode>.NodeCount.get -> int
+Graphical.Graph<TNode>.Nodes.get -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.IGraph<TNode>
+Graphical.IReadOnlyGraph<TNode>
+Graphical.IReadOnlyGraph<TNode>.Comparer.get -> System.Collections.Generic.IEqualityComparer<TNode>!
+Graphical.IReadOnlyGraph<TNode>.EdgeCount.get -> int
+Graphical.IReadOnlyGraph<TNode>.Edges.get -> System.Collections.Generic.IReadOnlyCollection<Graphical.Edge<TNode>>!
+Graphical.IReadOnlyGraph<TNode>.NodeCount.get -> int
+Graphical.IReadOnlyGraph<TNode>.Nodes.get -> System.Collections.Generic.IReadOnlyCollection<TNode>!
+Graphical.UndirectedGraph<TNode>
+Graphical.UndirectedGraph<TNode>.UndirectedGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void

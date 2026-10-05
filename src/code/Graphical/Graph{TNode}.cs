@@ -1,0 +1,40 @@
+using System.Collections.Generic;
+
+namespace Graphical;
+
+/// <summary>The base class for every graph in this library: node storage, edge counting and live views.</summary>
+/// <typeparam name="TNode">The node type.</typeparam>
+public abstract class Graph<TNode> : IGraph<TNode>
+    where TNode : notnull
+{
+    private protected Graph(IEqualityComparer<TNode>? comparer)
+    {
+        NodeTable = new NodeTable<TNode>(0, comparer ?? EqualityComparer<TNode>.Default);
+        Nodes = new NodeCollection<TNode>(NodeTable);
+        Edges = new EdgeCollection<TNode>(this);
+    }
+
+    /// <inheritdoc/>
+    public IEqualityComparer<TNode> Comparer => NodeTable.Comparer;
+
+    /// <inheritdoc/>
+    public int NodeCount => NodeTable.Count;
+
+    /// <inheritdoc/>
+    public int EdgeCount { get; private protected set; }
+
+    /// <inheritdoc/>
+    public IReadOnlyCollection<TNode> Nodes { get; }
+
+    /// <inheritdoc/>
+    public IReadOnlyCollection<Edge<TNode>> Edges { get; }
+
+    private protected NodeTable<TNode> NodeTable { get; }
+
+    private protected abstract IEnumerable<Edge<TNode>> EnumerateEdgesCore();
+
+    internal IEnumerable<Edge<TNode>> EnumerateEdges()
+    {
+        return EnumerateEdgesCore();
+    }
+}

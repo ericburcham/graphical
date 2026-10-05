@@ -74,6 +74,14 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
         }
     }
 
+    /// <summary>Returns the edge as text in the form <c>(Source -&gt; Target)</c>.</summary>
+    /// <returns>The formatted edge.</returns>
+    /// <remarks>O(1) plus the cost of formatting both nodes.</remarks>
+    public override string ToString()
+    {
+        return $"({Source} -> {Target})";
+    }
+
     /// <summary>Determines whether two edges have the same source and target.</summary>
     /// <param name="left">The first edge.</param>
     /// <param name="right">The second edge.</param>

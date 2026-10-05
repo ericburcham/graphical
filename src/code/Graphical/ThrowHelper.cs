@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Graphical;
 
@@ -11,5 +12,11 @@ internal static class ThrowHelper
         {
             throw new InvalidOperationException("The graph was modified; enumeration operation may not execute.");
         }
+    }
+
+    [DoesNotReturn]
+    public static void ThrowNegativeCapacity(int nodeCapacity)
+    {
+        throw new ArgumentOutOfRangeException(nameof(nodeCapacity), nodeCapacity, "The node capacity must not be negative.");
     }
 }

@@ -39,3 +39,6 @@ Graphical.IReadOnlyGraph<TNode>.NodeCount.get -> int
 Graphical.IReadOnlyGraph<TNode>.Nodes.get -> System.Collections.Generic.IReadOnlyCollection<TNode>!
 Graphical.UndirectedGraph<TNode>
 Graphical.UndirectedGraph<TNode>.UndirectedGraph(System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void
+Graphical.UndirectedGraph<TNode>.UndirectedGraph() -> void
+Graphical.UndirectedGraph<TNode>.UndirectedGraph(int nodeCapacity) -> void
+Graphical.UndirectedGraph<TNode>.UndirectedGraph(int nodeCapacity, System.Collections.Generic.IEqualityComparer<TNode>? comparer) -> void

@@ -15,6 +15,20 @@ public interface IReadOnlyDirectedAcyclicGraph<TNode> : IReadOnlyDirectedGraph<T
     /// </returns>
     IReadOnlyList<TNode> GetTopologicalOrder();
 
+    /// <summary>Gets every node that has a path to <paramref name="node"/>, not including the node itself.</summary>
+    /// <param name="node">The node whose ancestors to get.</param>
+    /// <returns>A snapshot of the ancestors, in slot order.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
+    /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    IReadOnlyCollection<TNode> GetAncestors(TNode node);
+
+    /// <summary>Gets every node that <paramref name="node"/> has a path to, not including the node itself.</summary>
+    /// <param name="node">The node whose descendants to get.</param>
+    /// <returns>A snapshot of the descendants, in slot order.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="node"/> is <see langword="null"/>.</exception>
+    /// <exception cref="KeyNotFoundException"><paramref name="node"/> is not in the graph.</exception>
+    IReadOnlyCollection<TNode> GetDescendants(TNode node);
+
     /// <summary>Determines whether adding an edge from <paramref name="source"/> to <paramref name="target"/> would create a cycle.</summary>
     /// <param name="source">The node the edge would start at.</param>
     /// <param name="target">The node the edge would end at.</param>

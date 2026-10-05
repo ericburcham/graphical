@@ -39,12 +39,14 @@ public abstract class Graph<TNode> : IGraph<TNode>
     /// <inheritdoc/>
     public bool ContainsNode(TNode node)
     {
+        ThrowHelper.ThrowIfNull(node);
         return NodeTable.TryGetSlot(node, out _);
     }
 
     /// <inheritdoc/>
     public bool AddNode(TNode node)
     {
+        ThrowHelper.ThrowIfNull(node);
         if (NodeTable.TryGetSlot(node, out _))
         {
             return false;

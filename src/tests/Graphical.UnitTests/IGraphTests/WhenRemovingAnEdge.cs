@@ -4,6 +4,7 @@ namespace Graphical.UnitTests.IGraphTests;
 
 [TestFixture(typeof(UndirectedGraph<>))]
 [TestFixture(typeof(DirectedGraph<>))]
+[TestFixture(typeof(DirectedAcyclicGraph<>))]
 internal sealed class WhenRemovingAnEdge
 {
     private const string SOURCE = "a";

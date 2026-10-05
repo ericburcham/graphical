@@ -48,6 +48,9 @@ public class DirectedGraph<TNode> : Graph<TNode>, IDirectedGraph<TNode>
     }
 #pragma warning restore RS0022
 
+    /// <summary>Gets the per-slot predecessor sets; <see cref="Graph{TNode}.Adjacency"/> holds the successors.</summary>
+    private protected HashSet<int>[] Predecessors => _predecessors;
+
     /// <inheritdoc/>
     public IReadOnlyCollection<TNode> GetSuccessors(TNode node)
     {

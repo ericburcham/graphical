@@ -27,6 +27,14 @@ public readonly struct Edge<TNode> : IEquatable<Edge<TNode>>
     /// <summary>Gets the node the edge ends at.</summary>
     public TNode Target { get; }
 
+    /// <summary>Returns the edge pointing the other way, from <see cref="Target"/> to <see cref="Source"/>.</summary>
+    /// <returns>A new edge with the endpoints swapped.</returns>
+    /// <remarks>O(1).</remarks>
+    public Edge<TNode> Reverse()
+    {
+        return new Edge<TNode>(Target, Source);
+    }
+
     /// <summary>Determines whether this edge has the same source and target as <paramref name="other"/>.</summary>
     /// <param name="other">The edge to compare with.</param>
     /// <returns><see langword="true"/> if both endpoints are equal under <see cref="EqualityComparer{T}.Default"/>; otherwise <see langword="false"/>.</returns>

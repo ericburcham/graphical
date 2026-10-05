@@ -15,3 +15,4 @@ override Graphical.Edge<TNode>.Equals(object? obj) -> bool
 override Graphical.Edge<TNode>.GetHashCode() -> int
 static Graphical.Edge<TNode>.operator !=(Graphical.Edge<TNode> left, Graphical.Edge<TNode> right) -> bool
 static Graphical.Edge<TNode>.operator ==(Graphical.Edge<TNode> left, Graphical.Edge<TNode> right) -> bool
+Graphical.Edge<TNode>.Reverse() -> Graphical.Edge<TNode>
